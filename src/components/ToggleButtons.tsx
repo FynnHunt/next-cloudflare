@@ -8,22 +8,28 @@ export default function ToggleButtons() {
   return (
     <div>
       <button
-        className={`rounded-l-sm border-solid border-2 border-${
-          colors.primaryYellow
-        } bg-${
-          hotSelected ? colors.primaryYellow : colors.primaryLime
-        } w-16 h-12 text-${colors.primaryDark}`}
+        className="rounded-l-md border-solid border-2 w-16 h-12"
+        style={{
+          backgroundColor: `${
+            hotSelected ? colors.primaryYellow : colors.primaryLime
+          }`,
+          color: colors.primaryDark,
+          borderColor: colors.primaryYellow,
+        }}
         onClick={() => setHotSelected(true)}
       >
         Hot
       </button>
       <button
-        className={`rounded-r-sm border-solid border-2 border-${
-          colors.primaryYellow
-        } bg-${
-          hotSelected ? colors.primaryLime : colors.primaryYellow
-        } w-16 h-12 text-${colors.primaryDark}`}
+        className={`rounded-r-md border-solid border-2 w-16 h-12`}
         onClick={() => setHotSelected(false)}
+        style={{
+          backgroundColor: `${
+            hotSelected ? colors.primaryLime : colors.primaryYellow
+          }`,
+          color: colors.primaryDark,
+          borderColor: colors.primaryYellow,
+        }}
       >
         New
       </button>
