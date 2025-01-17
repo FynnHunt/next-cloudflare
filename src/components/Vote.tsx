@@ -10,17 +10,32 @@ export default function Vote() {
   const [currentVote, setCurrentVote] = useState(0);
   const [voteClicked, setVoteClicked] = useState<VoteClicked>("neutral");
 
+  const upVote = () => {
+    if (voteClicked === "negative") {
+      setCurrentVote(currentVote + 1);
+      setVoteClicked("neutral");
+    } else if (voteClicked === "neutral") {
+      setCurrentVote(currentVote + 1);
+      setVoteClicked("positive");
+    }
+  };
+
+  const downVote = () => {
+    if (voteClicked === "positive") {
+      setCurrentVote(currentVote - 1);
+      setVoteClicked("neutral");
+    } else if (voteClicked === "neutral") {
+      setCurrentVote(currentVote - 1);
+      setVoteClicked("negative");
+    }
+  };
+
   return (
     <div
       className="flex flex-none justify-center items-center flex-col"
       style={{ color: colors.neutral }}
     >
-      <button
-        onClick={() => {
-          setCurrentVote(currentVote + 1);
-          setVoteClicked("positive");
-        }}
-      >
+      <button onClick={() => upVote()}>
         <Image
           src={`/icons/up-${
             voteClicked === "positive" ? "positive" : "neutral"
@@ -32,12 +47,7 @@ export default function Vote() {
         />
       </button>
       {currentVote}
-      <button
-        onClick={() => {
-          setCurrentVote(currentVote - 1);
-          setVoteClicked("negative");
-        }}
-      >
+      <button onClick={() => downVote()}>
         <Image
           src={`/icons/down-${
             voteClicked === "negative" ? "negative" : "neutral"
