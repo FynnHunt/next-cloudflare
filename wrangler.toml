@@ -13,3 +13,7 @@ assets = { directory = ".open-next/assets", binding = "ASSETS" }
 
 [observability.logs]
 enabled = true
+
+[[kv_namespaces]]
+binding = "POSTS"
+id = "ddee157e148f41d4a19044788f4d7644"
