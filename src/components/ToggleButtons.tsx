@@ -16,13 +16,23 @@ export default function ToggleButtons() {
           color: colors.primaryDark,
           borderColor: colors.primaryYellow,
         }}
-        onClick={() => setHotSelected(true)}
+        onClick={() => {
+          setHotSelected(true);
+          if (typeof window !== "undefined") {
+            window.location.search = "hot";
+          }
+        }}
       >
         Hot
       </button>
       <button
         className={`rounded-r-md border-solid border-2 w-16 h-12`}
-        onClick={() => setHotSelected(false)}
+        onClick={() => {
+          setHotSelected(false);
+          if (typeof window !== "undefined") {
+            window.location.search = "new";
+          }
+        }}
         style={{
           backgroundColor: `${
             hotSelected ? colors.primaryLime : colors.primaryYellow
