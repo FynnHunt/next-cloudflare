@@ -17,3 +17,8 @@ enabled = true
 [[kv_namespaces]]
 binding = "POSTS"
 id = "ddee157e148f41d4a19044788f4d7644"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "goose-goss-db"
+database_id = "19940f18-e6c8-4c53-926c-0fb79118f598"
