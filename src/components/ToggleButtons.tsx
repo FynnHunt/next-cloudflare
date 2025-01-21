@@ -1,9 +1,17 @@
 "use client";
 import { colors } from "@/globalStyles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ToggleButtons() {
   const [hotSelected, setHotSelected] = useState(true);
+
+  useEffect(() => {
+    if (window.location.search.includes("new")) {
+      setHotSelected(false);
+    } else {
+      setHotSelected(true);
+    }
+  }, []);
 
   return (
     <div>

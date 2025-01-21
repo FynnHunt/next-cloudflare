@@ -14,7 +14,7 @@ export default function NavBar() {
         <div className="flex items-center">
           <button>
             <Image
-              src="/icons/hamburger.svg"
+              src="/icons/goose.svg"
               width={40}
               height={40}
               alt="compose icon"
