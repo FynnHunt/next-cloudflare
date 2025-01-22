@@ -1,15 +1,21 @@
+import { PostsResult } from "@/types/posts";
+
 const END_POST = "#ENDPOST#";
 
-export const getPosts = (): string[] => {
-  // const posts = fetch("http://localhost:3000/api/posts");
-  // console.log(JSON.stringify(posts));
-  // return posts;
-
-  let posts = "";
-  if (typeof window !== "undefined") {
-    posts = window.localStorage.getItem("posts") || "";
+export const getPosts = async (): Promise<string[]> => {
+  const results = await fetch("http://localhost:3000/api/posts");
+  const postsResult = await results.json<PostsResult>();
+  let postContents: string[] = [];
+  if (postsResult) {
+    postContents = postsResult.posts.map((post) => post.content);
   }
-  return posts.split(END_POST).filter((post) => post !== "");
+  return postContents;
+
+  // let posts = "";
+  // if (typeof window !== "undefined") {
+  //   posts = window.localStorage.getItem("posts") || "";
+  // }
+  // return posts.split(END_POST).filter((post) => post !== "");
 };
 
 export const createPost = (post: string) => {
