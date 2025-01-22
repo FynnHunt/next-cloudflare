@@ -3,9 +3,9 @@ const posts: string[] = [];
 
 export async function GET() {
   const db = (await getCloudflareContext()).env.DB;
-  const { results } = await db.prepare("SELECT * FROM posts");
-  console.log(results);
-  return Response.json({ results });
+  const returnValue = await db.exec(`SELECT * FROM posts`);
+  console.log(returnValue);
+  return Response.json({ posts: returnValue });
 }
 
 export async function POST(request: Request) {
