@@ -7,13 +7,16 @@ export default function PostList() {
   const [posts, setPosts] = useState<string[]>([]);
 
   useEffect(() => {
-    const currentPosts = getPosts();
-    if (window.location.search.includes("new")) {
-      currentPosts.reverse();
-    } else {
-      // sort by votes
-    }
-    setPosts(currentPosts);
+    const getAndSetPosts = async () => {
+      const currentPosts = await getPosts();
+      if (window.location.search.includes("new")) {
+        currentPosts.reverse();
+      } else {
+        // sort by votes
+      }
+      setPosts(currentPosts);
+    };
+    getAndSetPosts();
   }, []);
 
   return (
