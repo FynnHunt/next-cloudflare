@@ -1,5 +1,5 @@
 "use client";
-import { getPosts } from "@/helpers/posts";
+import { getPosts } from "@/app/actions/postActions";
 import Post from "./Post";
 import { useEffect, useState } from "react";
 
@@ -14,7 +14,9 @@ export default function PostList() {
       } else {
         // sort by votes
       }
-      setPosts(currentPosts);
+      setPosts(
+        currentPosts.map((post) => post.content).filter((c) => c !== "")
+      );
     };
     getAndSetPosts();
   }, []);
