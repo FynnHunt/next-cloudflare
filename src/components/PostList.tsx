@@ -4,7 +4,7 @@ import Post from "./Post";
 import { useEffect, useState } from "react";
 import { Post as PostType, VoteStatus } from "../types/posts";
 import { Vote } from "../types/posts";
-import { getUsersPostVotes } from "../app/actions/userActions";
+import { createUser, getUsersPostVotes } from "../app/actions/userActions";
 
 export default function PostList() {
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -19,6 +19,7 @@ export default function PostList() {
       window.localStorage.setItem("userId", uuid);
       userId = uuid;
       newUser = true;
+      createUser(uuid);
     }
 
     const getAndSetPosts = async () => {
@@ -32,8 +33,10 @@ export default function PostList() {
     };
 
     const getAndSetUsersPostVotes = async () => {
-      const uPV = await getUsersPostVotes(userId);
-      setUsersPostVotes(uPV);
+      if (!newUser) {
+        const uPV = await getUsersPostVotes(userId);
+        setUsersPostVotes(uPV);
+      }
     };
 
     getAndSetPosts();
