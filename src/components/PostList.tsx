@@ -41,7 +41,11 @@ export default function PostList() {
   }, []);
 
   const getUserVoteStatusForPost = (postId: string): VoteStatus => {
-    const upv = usersPostVotes?.find((upv) => upv.post_id === postId);
+    const upv =
+      usersPostVotes && Array.isArray(usersPostVotes)
+        ? usersPostVotes.find((upv) => upv.post_id === postId)
+        : null;
+    console.log(usersPostVotes);
     if (upv) {
       switch (upv.vote) {
         case 0:
