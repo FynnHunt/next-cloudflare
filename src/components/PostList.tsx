@@ -4,22 +4,17 @@ import Post from "./Post";
 import { useEffect, useState } from "react";
 import { Post as PostType, VoteStatus } from "../types/posts";
 import { Vote } from "../types/posts";
-import { createUser, getUsersPostVotes } from "../app/actions/userActions";
+import { getUsersPostVotes } from "../app/actions/userActions";
 
 export default function PostList() {
   const [posts, setPosts] = useState<PostType[]>([]);
   const [usersPostVotes, setUsersPostVotes] = useState<Vote[]>([]);
 
   useEffect(() => {
-    let userId = window.localStorage.getItem("userId");
-    let newUser = false;
+    const userId = window.localStorage.getItem("userId");
 
     if (!userId) {
-      const uuid = crypto.randomUUID();
-      window.localStorage.setItem("userId", uuid);
-      userId = uuid;
-      newUser = true;
-      createUser(uuid);
+      return;
     }
 
     const getAndSetPosts = async () => {
@@ -33,10 +28,8 @@ export default function PostList() {
     };
 
     const getAndSetUsersPostVotes = async () => {
-      if (!newUser) {
-        const uPV = await getUsersPostVotes(userId);
-        setUsersPostVotes(uPV);
-      }
+      const uPV = await getUsersPostVotes(userId);
+      setUsersPostVotes(uPV);
     };
 
     getAndSetPosts();
