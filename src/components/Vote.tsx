@@ -3,31 +3,39 @@
 import Image from "next/image";
 import { colors } from "../globalStyles";
 import { useState } from "react";
+import { updatePostVotes } from "../app/actions/postActions";
 
 type VoteClicked = "positive" | "negative" | "neutral";
 
-export default function Vote() {
-  const [currentVote, setCurrentVote] = useState(0);
+export default function Vote({
+  votes,
+  postId,
+}: {
+  votes: number;
+  postId: string;
+}) {
   const [voteClicked, setVoteClicked] = useState<VoteClicked>("neutral");
 
   const upVote = () => {
     if (voteClicked === "negative") {
-      setCurrentVote(currentVote + 1);
       setVoteClicked("neutral");
+      updatePostVotes(postId, votes + 1);
     } else if (voteClicked === "neutral") {
-      setCurrentVote(currentVote + 1);
       setVoteClicked("positive");
+      updatePostVotes(postId, votes + 1);
     }
+    window.location.reload();
   };
 
   const downVote = () => {
     if (voteClicked === "positive") {
-      setCurrentVote(currentVote - 1);
       setVoteClicked("neutral");
+      updatePostVotes(postId, votes - 1);
     } else if (voteClicked === "neutral") {
-      setCurrentVote(currentVote - 1);
       setVoteClicked("negative");
+      updatePostVotes(postId, votes - 1);
     }
+    window.location.reload();
   };
 
   return (
@@ -46,7 +54,7 @@ export default function Vote() {
           style={{}}
         />
       </button>
-      {currentVote}
+      {votes}
       <button onClick={() => downVote()}>
         <Image
           src={`/icons/down-${

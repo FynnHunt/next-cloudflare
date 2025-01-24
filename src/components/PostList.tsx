@@ -2,9 +2,10 @@
 import { getPosts } from "@/app/actions/postActions";
 import Post from "./Post";
 import { useEffect, useState } from "react";
+import { Post as PostType } from "../types/posts";
 
 export default function PostList() {
-  const [posts, setPosts] = useState<string[]>([]);
+  const [posts, setPosts] = useState<PostType[]>([]);
 
   useEffect(() => {
     const getAndSetPosts = async () => {
@@ -14,9 +15,7 @@ export default function PostList() {
       } else {
         // sort by votes
       }
-      setPosts(
-        currentPosts.map((post) => post.content).filter((c) => c !== "")
-      );
+      setPosts(currentPosts.filter((c) => c.content !== ""));
     };
     getAndSetPosts();
   }, []);
@@ -24,7 +23,12 @@ export default function PostList() {
   return (
     <>
       {posts.map((post, idx) => (
-        <Post key={idx} text={post} />
+        <Post
+          key={post.id}
+          text={post.content}
+          votes={post.votes}
+          postId={post.id}
+        />
       ))}
     </>
   );

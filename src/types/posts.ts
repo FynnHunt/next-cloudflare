@@ -4,6 +4,7 @@ export type Post = {
   longitude: string;
   latitude: string;
   hidden: string;
+  votes: number;
 };
 
 export type PostsResult = {

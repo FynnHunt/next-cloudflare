@@ -12,13 +12,22 @@ export const getPosts = async (): Promise<Post[]> => {
   return results;
 };
 
-export const createPost = async (post: string) => {
+export const createPost = async (post: string, userId: string) => {
   const uuid = crypto.randomUUID();
   const db = (await getCloudflareContext()).env.DB;
   await db
     .prepare(
-      "INSERT INTO POSTS (id, content, longitude, latitude, hidden) VALUES (?1, ?2, '1', '1', 'false')"
+      "INSERT INTO POSTS (id, content, votes, longitude, latitude, hidden, user_id) VALUES (?1, ?2, 0, '1', '1', 'false', ?3)"
     )
-    .bind(uuid, post)
+    .bind(uuid, post, userId)
+    .run();
+};
+
+export const updatePostVotes = async (postId: string, newVotes: number) => {
+  const uuid = crypto.randomUUID();
+  const db = (await getCloudflareContext()).env.DB;
+  await db
+    .prepare("UPDATE POSTS SET votes = ?1 WHERE id = ?2")
+    .bind(newVotes, postId)
     .run();
 };
