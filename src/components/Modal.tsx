@@ -1,6 +1,6 @@
 "use client";
 
-import { createPost } from "@/helpers/posts";
+import { createPost } from "@/app/actions/postActions";
 import Image from "next/image";
 import { useState } from "react";
 
