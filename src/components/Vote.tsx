@@ -2,40 +2,36 @@
 
 import Image from "next/image";
 import { colors } from "../globalStyles";
-import { useState } from "react";
-import { updatePostVotes } from "../app/actions/postActions";
-
-type VoteClicked = "positive" | "negative" | "neutral";
+import { upsertUserPostVote } from "../app/actions/postActions";
+import { VoteStatus } from "../types/posts";
 
 export default function Vote({
   votes,
   postId,
+  voteStatus,
 }: {
   votes: number;
   postId: string;
+  voteStatus: VoteStatus;
 }) {
-  const [voteClicked, setVoteClicked] = useState<VoteClicked>("neutral");
-
   const upVote = () => {
-    if (voteClicked === "negative") {
-      setVoteClicked("neutral");
-      updatePostVotes(postId, votes + 1);
-    } else if (voteClicked === "neutral") {
-      setVoteClicked("positive");
-      updatePostVotes(postId, votes + 1);
+    if (typeof window !== "undefined") {
+      const userId = window.localStorage.getItem("userId");
+      if (userId) {
+        upsertUserPostVote(postId, userId, 1);
+        window.location.reload();
+      }
     }
-    window.location.reload();
   };
 
   const downVote = () => {
-    if (voteClicked === "positive") {
-      setVoteClicked("neutral");
-      updatePostVotes(postId, votes - 1);
-    } else if (voteClicked === "neutral") {
-      setVoteClicked("negative");
-      updatePostVotes(postId, votes - 1);
+    if (typeof window !== "undefined") {
+      const userId = window.localStorage.getItem("userId");
+      if (userId) {
+        upsertUserPostVote(postId, userId, -1);
+        window.location.reload();
+      }
     }
-    window.location.reload();
   };
 
   return (
@@ -46,7 +42,7 @@ export default function Vote({
       <button onClick={() => upVote()}>
         <Image
           src={`/icons/up-${
-            voteClicked === "positive" ? "positive" : "neutral"
+            voteStatus === "positive" ? "positive" : "neutral"
           }.svg`}
           alt="up arrow"
           width={40}
@@ -58,7 +54,7 @@ export default function Vote({
       <button onClick={() => downVote()}>
         <Image
           src={`/icons/down-${
-            voteClicked === "negative" ? "negative" : "neutral"
+            voteStatus === "negative" ? "negative" : "neutral"
           }.svg`}
           alt="up arrow"
           width={40}

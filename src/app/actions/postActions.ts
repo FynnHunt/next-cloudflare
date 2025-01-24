@@ -8,7 +8,12 @@ export const getPosts = async (): Promise<Post[]> => {
   const { results }: { results: Post[] } = await db
     .prepare(`SELECT * FROM posts`)
     .all();
-  console.log(results);
+  await Promise.all(
+    results.map(async (result) => {
+      const totalVotes = await getTotalPostVotes(result.id);
+      return { ...result, votes: totalVotes };
+    })
+  );
   return results;
 };
 
@@ -23,11 +28,26 @@ export const createPost = async (post: string, userId: string) => {
     .run();
 };
 
-export const updatePostVotes = async (postId: string, newVotes: number) => {
+export const getTotalPostVotes = async (postId: string): Promise<number> => {
+  const db = (await getCloudflareContext()).env.DB;
+  const totalVotes = await db
+    .prepare(`SELECT SUM(vote) AS total_votes FROM votes WHERE post_id = ?1`)
+    .bind(postId)
+    .all();
+  return totalVotes;
+};
+
+export const upsertUserPostVote = async (
+  postId: string,
+  userId: string,
+  vote: number
+) => {
   const uuid = crypto.randomUUID();
   const db = (await getCloudflareContext()).env.DB;
   await db
-    .prepare("UPDATE POSTS SET votes = ?1 WHERE id = ?2")
-    .bind(newVotes, postId)
+    .prepare(
+      "INSERT INTO votes (id, post_id, user_id, vote) VALUES (?1, ?2, ?3, ?4) ON CONFLICT(post_id, user_id) DO UPDATE SET vote = excluded.vote"
+    )
+    .bind(uuid, postId, userId, vote)
     .run();
 };
