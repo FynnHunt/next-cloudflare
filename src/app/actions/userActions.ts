@@ -14,5 +14,6 @@ export const getUsersPostVotes = async (userId: string): Promise<Vote[]> => {
     .prepare("SELECT * FROM votes WHERE user_id = ?1")
     .bind(userId)
     .all();
+  console.log("user votes: ", usersVotes);
   return usersVotes;
 };

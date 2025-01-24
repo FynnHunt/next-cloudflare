@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "deploy": "opennextjs-cloudflare && wrangler deploy",
-    "preview": "opennextjs-cloudflare && wrangler dev",
+    "preview": "opennextjs-cloudflare && wrangler d1 execute goose-goss-db --local --command \"CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY ); CREATE TABLE IF NOT EXISTS posts ( id INTEGER PRIMARY KEY, content TEXT, user_id TEXT, longitude TEXT, latitude TEXT, votes INTEGER, hidden TEXT ); CREATE TABLE IF NOT EXISTS votes ( id INTEGER PRIMARY KEY, user_id TEXT, post_id TEXT, vote NUMBER );\" && wrangler dev",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts"
   },
   "dependencies": {
