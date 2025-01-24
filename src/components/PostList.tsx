@@ -8,6 +8,9 @@ export default function PostList() {
   const [posts, setPosts] = useState<PostType[]>([]);
 
   useEffect(() => {
+    if (!window.localStorage.get("userId")) {
+      window.localStorage.setItem("userId", crypto.randomUUID());
+    }
     const getAndSetPosts = async () => {
       const currentPosts = await getPosts();
       if (window.location.search.includes("new")) {

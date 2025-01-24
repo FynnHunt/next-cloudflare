@@ -13,8 +13,13 @@ export default function Modal({ showModal, setShowModal }: ModalProps) {
   const [postContent, setPostContent] = useState("");
 
   const post = () => {
-    createPost(postContent);
-    window.location.reload();
+    if (typeof window !== "undefined") {
+      createPost(
+        postContent,
+        window.localStorage.getItem("userId") || crypto.randomUUID()
+      );
+      window.location.reload();
+    }
   };
 
   return showModal ? (
