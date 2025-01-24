@@ -8,7 +8,7 @@ export default function PostList() {
   const [posts, setPosts] = useState<PostType[]>([]);
 
   useEffect(() => {
-    if (!window.localStorage.get("userId")) {
+    if (!window.localStorage.getItem("userId")) {
       window.localStorage.setItem("userId", crypto.randomUUID());
     }
     const getAndSetPosts = async () => {
