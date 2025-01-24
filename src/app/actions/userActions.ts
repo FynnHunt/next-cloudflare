@@ -15,5 +15,5 @@ export const getUsersPostVotes = async (userId: string): Promise<Vote[]> => {
     .bind(userId)
     .all();
   console.log("user votes: ", usersVotes);
-  return usersVotes;
+  return usersVotes || [];
 };

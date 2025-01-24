@@ -14,7 +14,7 @@ export const getPosts = async (): Promise<Post[]> => {
       return { ...result, votes: totalVotes };
     })
   );
-  return results;
+  return results || [];
 };
 
 export const createPost = async (post: string, userId: string) => {
@@ -34,7 +34,7 @@ export const getTotalPostVotes = async (postId: string): Promise<number> => {
     .prepare(`SELECT SUM(vote) AS total_votes FROM votes WHERE post_id = ?1`)
     .bind(postId)
     .all();
-  return totalVotes;
+  return totalVotes || 0;
 };
 
 export const upsertUserPostVote = async (
