@@ -14,7 +14,6 @@ export default function Post({
   postId,
   userVoteStatus,
 }: PostProps) {
-  console.log(JSON.stringify(votes));
   return (
     <div className={`bg-zinc-800 w-9/12 max-w-7xl h-32 rounded-md p-6 flex`}>
       <div className="flex-auto">{text}</div>

@@ -34,7 +34,10 @@ export const getTotalPostVotes = async (postId: string): Promise<number> => {
     .prepare(`SELECT SUM(vote) AS total_votes FROM votes WHERE post_id = ?1`)
     .bind(postId)
     .all();
-  return totalVotes || 0;
+  if (totalVotes?.results?.length > 0) {
+    return totalVotes.results[0].total_votes;
+  }
+  return 0;
 };
 
 export const upsertUserPostVote = async (
