@@ -8,13 +8,13 @@ export const getPosts = async (): Promise<Post[]> => {
   const { results }: { results: Post[] } = await db
     .prepare(`SELECT * FROM posts`)
     .all();
-  await Promise.all(
+  const resultsWithVotes = await Promise.all(
     results.map(async (result) => {
       const totalVotes = await getTotalPostVotes(result.id);
       return { ...result, votes: totalVotes };
     })
   );
-  return results || [];
+  return resultsWithVotes || [];
 };
 
 export const createPost = async (post: string, userId: string) => {
