@@ -36,8 +36,6 @@ export default function PostList() {
     getAndSetUsersPostVotes();
   }, []);
 
-  console.log(JSON.stringify(usersPostVotes));
-
   const getUserVoteStatusForPost = (postId: string): VoteStatus => {
     const upv =
       usersPostVotes && Array.isArray(usersPostVotes)

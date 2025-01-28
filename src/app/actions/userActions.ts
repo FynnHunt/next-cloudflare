@@ -10,10 +10,9 @@ export const createUser = async (userId: string) => {
 
 export const getUsersPostVotes = async (userId: string): Promise<Vote[]> => {
   const db = (await getCloudflareContext()).env.DB;
-  const usersVotes: Vote[] = await db
+  const { results }: { results: Vote[] } = await db
     .prepare("SELECT * FROM votes WHERE user_id = ?1")
     .bind(userId)
     .all();
-  console.log("user votes: ", usersVotes);
-  return usersVotes || [];
+  return results || [];
 };
