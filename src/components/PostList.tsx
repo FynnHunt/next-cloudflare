@@ -36,6 +36,8 @@ export default function PostList() {
     getAndSetUsersPostVotes();
   }, []);
 
+  console.log(JSON.stringify(usersPostVotes));
+
   const getUserVoteStatusForPost = (postId: string): VoteStatus => {
     const upv =
       usersPostVotes && Array.isArray(usersPostVotes)
@@ -43,7 +45,7 @@ export default function PostList() {
         : null;
     console.log(usersPostVotes);
     if (upv) {
-      switch (upv.vote) {
+      switch (upv?.vote) {
         case 0:
           return "neutral";
         case 1:
