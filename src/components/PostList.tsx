@@ -18,11 +18,13 @@ export default function PostList() {
     }
 
     const getAndSetPosts = async () => {
-      const currentPosts = await getPosts();
+      let currentPosts = await getPosts();
       if (window.location.search.includes("new")) {
+        // sort by most recent
         currentPosts.reverse();
       } else {
         // sort by votes
+        currentPosts = currentPosts.sort(({ votes: a }, { votes: b }) => b - a);
       }
       setPosts(currentPosts.filter((c) => c.content !== ""));
     };
