@@ -48,7 +48,7 @@ export default function PostList() {
           return "neutral";
         case 1:
           return "positive";
-        case 2:
+        case -1:
           return "negative";
         default:
           return "neutral";
