@@ -18,8 +18,13 @@ export default function Vote({
     if (typeof window !== "undefined") {
       const userId = window.localStorage.getItem("userId");
       if (userId) {
-        upsertUserPostVote(postId, userId, 1);
-        window.location.reload();
+        if (voteStatus === "negative") {
+          upsertUserPostVote(postId, userId, 0);
+          window.location.reload();
+        } else if (voteStatus === "neutral") {
+          upsertUserPostVote(postId, userId, 1);
+          window.location.reload();
+        }
       }
     }
   };
@@ -28,8 +33,13 @@ export default function Vote({
     if (typeof window !== "undefined") {
       const userId = window.localStorage.getItem("userId");
       if (userId) {
-        upsertUserPostVote(postId, userId, -1);
-        window.location.reload();
+        if (voteStatus === "positive") {
+          upsertUserPostVote(postId, userId, 0);
+          window.location.reload();
+        } else if (voteStatus === "neutral") {
+          upsertUserPostVote(postId, userId, -1);
+          window.location.reload();
+        }
       }
     }
   };
