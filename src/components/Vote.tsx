@@ -50,7 +50,7 @@ export default function Vote({
           style={{}}
         />
       </button>
-      {votes}
+      {votes || 0}
       <button onClick={() => downVote()}>
         <Image
           src={`/icons/down-${
