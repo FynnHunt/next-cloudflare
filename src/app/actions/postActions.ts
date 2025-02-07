@@ -17,14 +17,58 @@ export const getPosts = async (): Promise<Post[]> => {
   return resultsWithVotes || [];
 };
 
-export const createPost = async (post: string, userId: string) => {
+export const getPostsWithinDistanceOfPoint = async (
+  latitude: string,
+  longitude: string,
+  distanceKm: string
+): Promise<Post[]> => {
+  const db = (await getCloudflareContext()).env.DB;
+  const { results }: { results: Post[] } = await db
+    .prepare(
+      `SELECT 
+    posts.*, 
+    (6371 * acos(
+        cos(radians(?1)) * 
+        cos(radians(CAST(posts.latitude AS REAL))) * 
+        cos(radians(CAST(posts.longitude AS REAL)) - radians(?2)) + 
+        sin(radians(?1)) * 
+        sin(radians(CAST(posts.latitude AS REAL)))
+    )) AS distance_km
+FROM posts
+WHERE 
+    (6371 * acos(
+        cos(radians(?1)) * 
+        cos(radians(CAST(posts.latitude AS REAL))) * 
+        cos(radians(CAST(posts.longitude AS REAL)) - radians(?2)) + 
+        sin(radians(?1)) * 
+        sin(radians(CAST(posts.latitude AS REAL)))
+    )) <= ?3
+ORDER BY distance_km;`
+    )
+    .bind(latitude, longitude, distanceKm)
+    .all();
+  const resultsWithVotes = await Promise.all(
+    results.map(async (result) => {
+      const totalVotes = await getTotalPostVotes(result.id);
+      return { ...result, votes: totalVotes };
+    })
+  );
+  return resultsWithVotes || [];
+};
+
+export const createPost = async (
+  post: string,
+  latitude: string,
+  longitude: string,
+  userId: string
+) => {
   const uuid = crypto.randomUUID();
   const db = (await getCloudflareContext()).env.DB;
   await db
     .prepare(
-      "INSERT INTO POSTS (id, content, votes, longitude, latitude, hidden, user_id) VALUES (?1, ?2, 0, '1', '1', 'false', ?3)"
+      "INSERT INTO POSTS (id, content, votes, longitude, latitude, hidden, user_id) VALUES (?1, ?2, 0, ?3, ?4, 'false', ?5)"
     )
-    .bind(uuid, post, userId)
+    .bind(uuid, post, latitude, longitude, userId)
     .run();
 };
 

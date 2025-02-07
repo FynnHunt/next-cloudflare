@@ -6,6 +6,7 @@ export type Post = {
   hidden: string;
   votes: number;
   user_id: string;
+  distance_km?: string;
 };
 
 export type PostsResult = {

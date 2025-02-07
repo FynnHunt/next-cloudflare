@@ -2,7 +2,8 @@
 
 import { createPost } from "@/app/actions/postActions";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "../app/hooks/useLocation";
 
 type ModalProps = {
   showModal: boolean;
@@ -11,11 +12,14 @@ type ModalProps = {
 
 export default function Modal({ showModal, setShowModal }: ModalProps) {
   const [postContent, setPostContent] = useState("");
+  const location = useLocation();
 
   const post = () => {
     if (typeof window !== "undefined") {
       createPost(
         postContent,
+        location?.latitude.toString() || "0",
+        location?.longitude.toString() || "0",
         window.localStorage.getItem("userId") || crypto.randomUUID()
       );
       window.location.reload();

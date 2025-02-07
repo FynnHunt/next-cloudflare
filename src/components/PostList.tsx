@@ -1,14 +1,20 @@
 "use client";
-import { getPosts } from "@/app/actions/postActions";
+import { getPostsWithinDistanceOfPoint } from "@/app/actions/postActions";
 import Post from "./Post";
 import { useEffect, useState } from "react";
 import { Post as PostType, VoteStatus } from "../types/posts";
 import { Vote } from "../types/posts";
 import { getUsersPostVotes } from "../app/actions/userActions";
+import { useLocation } from "../app/hooks/useLocation";
 
-export default function PostList() {
+type PostListProps = {
+  distanceKm: number;
+};
+
+export default function PostList({ distanceKm }: PostListProps) {
   const [posts, setPosts] = useState<PostType[]>([]);
   const [usersPostVotes, setUsersPostVotes] = useState<Vote[]>([]);
+  const location = useLocation();
 
   useEffect(() => {
     const userId = window.localStorage.getItem("userId");
@@ -18,7 +24,11 @@ export default function PostList() {
     }
 
     const getAndSetPosts = async () => {
-      let currentPosts = await getPosts();
+      let currentPosts = await getPostsWithinDistanceOfPoint(
+        String(location?.latitude) || "0",
+        String(location?.longitude) || "0",
+        String(distanceKm)
+      );
       if (window.location.search.includes("new")) {
         // sort by most recent
         currentPosts.reverse();
@@ -36,7 +46,7 @@ export default function PostList() {
 
     getAndSetPosts();
     getAndSetUsersPostVotes();
-  }, []);
+  }, [distanceKm, location]);
 
   const getUserVoteStatusForPost = (postId: string): VoteStatus => {
     const upv =
