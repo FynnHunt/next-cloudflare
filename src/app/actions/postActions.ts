@@ -2,6 +2,12 @@
 
 import { Post } from "@/types/posts";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import {
+  createPostQuery,
+  getTotalPostVotesQuery,
+  postsWithinDistanceOfPointQuery,
+  upsertUserPostVoteQuery,
+} from "../../sql/postQueries";
 
 export const getPosts = async (): Promise<Post[]> => {
   const db = (await getCloudflareContext()).env.DB;
@@ -23,28 +29,14 @@ export const getPostsWithinDistanceOfPoint = async (
   distanceKm: string
 ): Promise<Post[]> => {
   const db = (await getCloudflareContext()).env.DB;
+  console.log(
+    "GET POSTS WITHIN DISTANCE OF POINT: ",
+    latitude,
+    longitude,
+    distanceKm
+  );
   const { results }: { results: Post[] } = await db
-    .prepare(
-      `SELECT 
-    posts.*, 
-    (6371 * acos(
-        cos(radians(?1)) * 
-        cos(radians(CAST(posts.latitude AS REAL))) * 
-        cos(radians(CAST(posts.longitude AS REAL)) - radians(?2)) + 
-        sin(radians(?1)) * 
-        sin(radians(CAST(posts.latitude AS REAL)))
-    )) AS distance_km
-FROM posts
-WHERE 
-    (6371 * acos(
-        cos(radians(?1)) * 
-        cos(radians(CAST(posts.latitude AS REAL))) * 
-        cos(radians(CAST(posts.longitude AS REAL)) - radians(?2)) + 
-        sin(radians(?1)) * 
-        sin(radians(CAST(posts.latitude AS REAL)))
-    )) <= ?3
-ORDER BY distance_km;`
-    )
+    .prepare(postsWithinDistanceOfPointQuery)
     .bind(latitude, longitude, distanceKm)
     .all();
   const resultsWithVotes = await Promise.all(
@@ -65,9 +57,7 @@ export const createPost = async (
   const uuid = crypto.randomUUID();
   const db = (await getCloudflareContext()).env.DB;
   await db
-    .prepare(
-      "INSERT INTO POSTS (id, content, votes, longitude, latitude, hidden, user_id) VALUES (?1, ?2, 0, ?3, ?4, 'false', ?5)"
-    )
+    .prepare(createPostQuery)
     .bind(uuid, post, latitude, longitude, userId)
     .run();
 };
@@ -75,7 +65,7 @@ export const createPost = async (
 export const getTotalPostVotes = async (postId: string): Promise<number> => {
   const db = (await getCloudflareContext()).env.DB;
   const totalVotes = await db
-    .prepare(`SELECT SUM(vote) AS total_votes FROM votes WHERE post_id = ?1`)
+    .prepare(getTotalPostVotesQuery)
     .bind(postId)
     .all();
   if (totalVotes?.results?.length > 0) {
@@ -92,9 +82,7 @@ export const upsertUserPostVote = async (
   const uuid = crypto.randomUUID();
   const db = (await getCloudflareContext()).env.DB;
   await db
-    .prepare(
-      "INSERT INTO votes (id, post_id, user_id, vote) VALUES (?1, ?2, ?3, ?4) ON CONFLICT(post_id, user_id) DO UPDATE SET vote = excluded.vote"
-    )
+    .prepare(upsertUserPostVoteQuery)
     .bind(uuid, postId, userId, vote)
     .run();
 };

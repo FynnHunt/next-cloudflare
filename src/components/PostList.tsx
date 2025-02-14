@@ -24,6 +24,7 @@ export default function PostList({ distanceKm }: PostListProps) {
     }
 
     const getAndSetPosts = async () => {
+      console.log(location);
       let currentPosts = await getPostsWithinDistanceOfPoint(
         String(location?.latitude) || "0",
         String(location?.longitude) || "0",
