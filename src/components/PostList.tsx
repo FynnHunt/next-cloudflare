@@ -32,6 +32,7 @@ export default function PostList({ distanceKm }: PostListProps) {
           String(location.longitude),
           String(distanceKm)
         );
+        console.log("CURRENT POSTS: ", currentPosts);
       }
       if (window.location.search.includes("new")) {
         // sort by most recent
