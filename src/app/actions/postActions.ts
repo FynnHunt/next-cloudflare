@@ -31,6 +31,7 @@ export const getPostsWithinDistanceOfPoint = async (
   const db = (await getCloudflareContext()).env.DB;
   console.log(
     "GET POSTS WITHIN DISTANCE OF POINT: ",
+    postsWithinDistanceOfPointQuery,
     latitude,
     longitude,
     distanceKm

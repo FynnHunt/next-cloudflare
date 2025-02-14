@@ -25,11 +25,14 @@ export default function PostList({ distanceKm }: PostListProps) {
 
     const getAndSetPosts = async () => {
       console.log(location);
-      let currentPosts = await getPostsWithinDistanceOfPoint(
-        String(location?.latitude) || "0",
-        String(location?.longitude) || "0",
-        String(distanceKm)
-      );
+      let currentPosts: PostType[] = [];
+      if (location?.latitude && location?.longitude) {
+        currentPosts = await getPostsWithinDistanceOfPoint(
+          String(location.latitude),
+          String(location.longitude),
+          String(distanceKm)
+        );
+      }
       if (window.location.search.includes("new")) {
         // sort by most recent
         currentPosts.reverse();
