@@ -32,9 +32,9 @@ export const getPostsWithinDistanceOfPoint = async (
   console.log(
     "GET POSTS WITHIN DISTANCE OF POINT: ",
     postsWithinDistanceOfPointQuery
-      .replace("?1", latitude)
-      .replace("?2", longitude)
-      .replace("?3", distanceKm),
+      .replaceAll("?1", latitude)
+      .replaceAll("?2", longitude)
+      .replaceAll("?3", distanceKm),
     latitude,
     longitude,
     distanceKm
