@@ -16,13 +16,19 @@ export default function Modal({ showModal, setShowModal }: ModalProps) {
 
   const post = () => {
     if (typeof window !== "undefined") {
-      createPost(
-        postContent,
-        location?.latitude.toString() || "0",
-        location?.longitude.toString() || "0",
-        window.localStorage.getItem("userId") || crypto.randomUUID()
-      );
-      window.location.reload();
+      if (location?.latitude && location?.longitude) {
+        createPost(
+          postContent,
+          location.latitude.toString(),
+          location.longitude.toString(),
+          window.localStorage.getItem("userId") || crypto.randomUUID()
+        );
+        window.location.reload();
+      } else {
+        alert(
+          "You must enable location services for this site to create posts."
+        );
+      }
     }
   };
 
