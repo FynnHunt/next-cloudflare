@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import ToggleButtons from "./ToggleButtons";
-import Modal from "./Modal";
+import PostModal from "./PostModal";
 import { useState } from "react";
 
 export default function NavBar() {
@@ -33,7 +33,10 @@ export default function NavBar() {
           </button>
         </div>
       </div>
-      <Modal showModal={showComposeModal} setShowModal={setShowComposeModal} />
+      <PostModal
+        showModal={showComposeModal}
+        setShowModal={setShowComposeModal}
+      />
     </div>
   );
 }

@@ -10,7 +10,7 @@ type ModalProps = {
   setShowModal: (cond: boolean) => void;
 };
 
-export default function Modal({ showModal, setShowModal }: ModalProps) {
+export default function PostModal({ showModal, setShowModal }: ModalProps) {
   const [postContent, setPostContent] = useState("");
   const location = useLocation();
 

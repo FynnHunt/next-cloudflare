@@ -43,12 +43,14 @@ export const getPostsWithinDistanceOfPoint = async (
     .prepare(postsWithinDistanceOfPointQuery)
     .bind(latitude, longitude, distanceKm)
     .all();
+  console.log("DB Results: ", JSON.stringify(results));
   const resultsWithVotes = await Promise.all(
     results.map(async (result) => {
       const totalVotes = await getTotalPostVotes(result.id);
       return { ...result, votes: totalVotes };
     })
   );
+  console.log("DB Results with votes: ", JSON.stringify(resultsWithVotes));
   return resultsWithVotes || [];
 };
 
