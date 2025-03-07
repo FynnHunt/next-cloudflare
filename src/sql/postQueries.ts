@@ -19,9 +19,9 @@ WHERE
 ORDER BY distance_km;`;
 
 export const createPostQuery =
-  "INSERT INTO POSTS (id, content, votes, latitude, longitude, hidden, user_id) VALUES (?1, ?2, 0, ?3, ?4, 'false', ?5)";
+  "INSERT INTO POSTS (id, content, votes, latitude, longitude, hidden, user_id) VALUES (?1, ?2, 0, ?3, ?4, 'false', ?5);";
 
 export const upsertUserPostVoteQuery =
-  "INSERT INTO votes (id, post_id, user_id, vote) VALUES (?1, ?2, ?3, ?4) ON CONFLICT(post_id, user_id) DO UPDATE SET vote = excluded.vote";
+  "INSERT INTO votes (id, post_id, user_id, vote) VALUES (?1, ?2, ?3, ?4) ON CONFLICT(post_id, user_id) DO UPDATE SET vote = excluded.vote;";
 
-export const getTotalPostVotesQuery = `SELECT SUM(vote) AS total_votes FROM votes WHERE post_id = ?1`;
+export const getTotalPostVotesQuery = `SELECT SUM(vote) AS total_votes FROM votes WHERE post_id = ?1;`;

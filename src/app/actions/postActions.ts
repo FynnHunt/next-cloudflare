@@ -12,7 +12,7 @@ import {
 export const getPosts = async (): Promise<Post[]> => {
   const db = (await getCloudflareContext()).env.DB;
   const { results }: { results: Post[] } = await db
-    .prepare(`SELECT * FROM posts`)
+    .prepare(`SELECT * FROM posts;`)
     .all();
   const resultsWithVotes = await Promise.all(
     results.map(async (result) => {
