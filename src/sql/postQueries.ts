@@ -1,22 +1,20 @@
-export const postsWithinDistanceOfPointQuery = `SELECT 
+export const postsWithinDistanceOfPointQuery = `
+WITH calculated_posts AS (
+  SELECT 
     posts.*, 
     (6371 * acos(
-        cos(radians(?1)) * 
-        cos(radians(CAST(posts.latitude AS REAL))) * 
-        cos(radians(CAST(posts.longitude AS REAL)) - radians(?2)) + 
-        sin(radians(?1)) * 
-        sin(radians(CAST(posts.latitude AS REAL)))
+      cos(radians(?1)) * 
+      cos(radians(CAST(posts.latitude AS REAL))) * 
+      cos(radians(CAST(posts.longitude AS REAL)) - radians(?2)) + 
+      sin(radians(?1)) * 
+      sin(radians(CAST(posts.latitude AS REAL)))
     )) AS distance_km
-FROM posts
-WHERE 
-    (6371 * acos(
-        cos(radians(?1)) * 
-        cos(radians(CAST(posts.latitude AS REAL))) * 
-        cos(radians(CAST(posts.longitude AS REAL)) - radians(?2)) + 
-        sin(radians(?1)) * 
-        sin(radians(CAST(posts.latitude AS REAL)))
-    )) <= ?3
-ORDER BY distance_km;`;
+  FROM posts
+)
+SELECT * FROM calculated_posts
+WHERE distance_km <= ?3
+ORDER BY distance_km;
+`;
 
 export const createPostQuery =
   "INSERT INTO POSTS (id, content, votes, latitude, longitude, hidden, user_id) VALUES (?1, ?2, 0, ?3, ?4, 'false', ?5);";

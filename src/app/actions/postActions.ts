@@ -29,28 +29,16 @@ export const getPostsWithinDistanceOfPoint = async (
   distanceKm: string
 ): Promise<Post[]> => {
   const db = (await getCloudflareContext()).env.DB;
-  console.log(
-    "GET POSTS WITHIN DISTANCE OF POINT: ",
-    postsWithinDistanceOfPointQuery
-      .replaceAll("?1", latitude)
-      .replaceAll("?2", longitude)
-      .replaceAll("?3", distanceKm),
-    latitude,
-    longitude,
-    distanceKm
-  );
   const { results }: { results: Post[] } = await db
     .prepare(postsWithinDistanceOfPointQuery)
-    .bind(latitude, longitude, distanceKm)
+    .bind(Number(latitude), Number(longitude), Number(distanceKm))
     .all();
-  console.log("DB Results: ", JSON.stringify(results));
   const resultsWithVotes = await Promise.all(
     results.map(async (result) => {
       const totalVotes = await getTotalPostVotes(result.id);
       return { ...result, votes: totalVotes };
     })
   );
-  console.log("DB Results with votes: ", JSON.stringify(resultsWithVotes));
   return resultsWithVotes || [];
 };
 
