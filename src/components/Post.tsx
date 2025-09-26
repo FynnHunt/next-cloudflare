@@ -16,7 +16,7 @@ export default function Post({
 }: PostProps) {
   return (
     <div
-      className={`bg-zinc-800 w-full md:w-9/12 md:max-w-7xl h-32 rounded-md p-6 flex`}
+      className={`bg-zinc-800 w-full md:w-9/12 md:max-w-7xl h-32 rounded-md p-6 flex h-fit`}
     >
       <div className="flex-auto">{text}</div>
       <Vote votes={votes} postId={postId} voteStatus={userVoteStatus} />

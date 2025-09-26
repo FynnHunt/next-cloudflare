@@ -8,6 +8,7 @@ import {
   postsWithinDistanceOfPointQuery,
   upsertUserPostVoteQuery,
 } from "../../sql/postQueries";
+import { mockPosts } from "../../lib/testData";
 
 export const getPosts = async (): Promise<Post[]> => {
   const db = (await getCloudflareContext()).env.DB;
@@ -28,6 +29,9 @@ export const getPostsWithinDistanceOfPoint = async (
   longitude: string,
   distanceKm: string
 ): Promise<Post[]> => {
+  // if running in dev mode use test posts
+  if (process.env.NODE_ENV === "development") return mockPosts;
+
   const db = (await getCloudflareContext()).env.DB;
   const { results }: { results: Post[] } = await db
     .prepare(postsWithinDistanceOfPointQuery)

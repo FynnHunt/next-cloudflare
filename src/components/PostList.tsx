@@ -32,44 +32,6 @@ export default function PostList({ distanceKm }: PostListProps) {
           String(location.longitude),
           String(distanceKm)
         );
-        // currentPosts = [
-        //   {
-        //     id: "test1",
-        //     content: "test",
-        //     longitude: "123",
-        //     latitude: "123",
-        //     hidden: "false",
-        //     votes: 10,
-        //     user_id: "test",
-        //   },
-        //   {
-        //     id: "test2",
-        //     content: "test",
-        //     longitude: "123",
-        //     latitude: "123",
-        //     hidden: "false",
-        //     votes: 10,
-        //     user_id: "test",
-        //   },
-        //   {
-        //     id: "test3",
-        //     content: "test",
-        //     longitude: "123",
-        //     latitude: "123",
-        //     hidden: "false",
-        //     votes: 10,
-        //     user_id: "test",
-        //   },
-        //   {
-        //     id: "test4",
-        //     content: "test",
-        //     longitude: "123",
-        //     latitude: "123",
-        //     hidden: "false",
-        //     votes: 10,
-        //     user_id: "test",
-        //   },
-        // ];
         console.log("CURRENT POSTS: ", currentPosts);
       }
       if (window.location.search.includes("new")) {
