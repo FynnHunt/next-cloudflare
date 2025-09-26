@@ -67,7 +67,7 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
           To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
       --> */}
           <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-            <div className="bg-lime-100 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div className="bg-lime-200 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
               <div className="sm:flex sm:items-start">
                 <div className="mx-auto flex size-12 shrink-0 items-center justify-center sm:mx-0 sm:size-10">
                   {/* <svg
@@ -86,9 +86,9 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
                     />
                   </svg> */}
                   <Image
-                    src="/icons/compose.svg"
-                    width={40}
-                    height={40}
+                    src="/icons/compose2.svg"
+                    width={30}
+                    height={30}
                     alt="compose icon"
                   />
                 </div>
@@ -113,7 +113,7 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
                 </div>
               </div>
             </div>
-            <div className="bg-lime-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+            <div className="bg-lime-400 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
               <button
                 type="button"
                 className="text-zinc-900 inline-flex w-full justify-center rounded-md bg-amber-200 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-300   sm:ml-3 sm:w-auto"

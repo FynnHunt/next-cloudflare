@@ -14,7 +14,7 @@ export default function NavBar() {
         <div className="flex items-center">
           <button>
             <Image
-              src="/icons/goose.svg"
+              src="/icons/goose2.svg"
               width={40}
               height={40}
               alt="compose icon"
@@ -25,9 +25,9 @@ export default function NavBar() {
         <div className="flex items-center">
           <button onClick={() => setShowComposeModal(true)}>
             <Image
-              src="/icons/compose.svg"
-              width={40}
-              height={40}
+              src="/icons/compose2.svg"
+              width={30}
+              height={30}
               alt="compose icon"
             />
           </button>
