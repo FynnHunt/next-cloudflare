@@ -4,7 +4,7 @@ import Auth from "../components/Auth";
 export default function Home() {
   return (
     <div className="bg-zinc-900 w-full h-screen flex flex-col items-center p-6 gap-y-3">
-      <PostList distanceKm={3} />
+      <PostList distanceKm={100} />
       <Auth />
     </div>
   );

@@ -8,7 +8,7 @@ import {
   postsWithinDistanceOfPointQuery,
   upsertUserPostVoteQuery,
 } from "../../sql/postQueries";
-import { mockPosts } from "../../lib/testData";
+import { mockPosts, aiGeneratedPosts } from "../../lib/testData";
 
 export const getPosts = async (): Promise<Post[]> => {
   const db = (await getCloudflareContext()).env.DB;
