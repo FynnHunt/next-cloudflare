@@ -30,16 +30,16 @@ export default function PostList({ distanceKm }: PostListProps) {
         currentPosts = await getPostsWithinDistanceOfPoint(
           String(location.latitude),
           String(location.longitude),
-          String(distanceKm)
+          String(distanceKm),
         );
         console.log("CURRENT POSTS: ", currentPosts);
       }
-      if (window.location.search.includes("new")) {
-        // sort by most recent
-        currentPosts.reverse();
-      } else {
+      if (window.location.search.includes("hot")) {
         // sort by votes
         currentPosts = currentPosts.sort(({ votes: a }, { votes: b }) => b - a);
+      } else {
+        // otherwise sort by most recent
+        currentPosts.reverse();
       }
       setPosts(currentPosts.filter((c) => c.content !== ""));
     };
