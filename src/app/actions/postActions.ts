@@ -19,7 +19,7 @@ export const getPosts = async (): Promise<Post[]> => {
     results.map(async (result) => {
       const totalVotes = await getTotalPostVotes(result.id);
       return { ...result, votes: totalVotes };
-    })
+    }),
   );
   return resultsWithVotes || [];
 };
@@ -27,7 +27,7 @@ export const getPosts = async (): Promise<Post[]> => {
 export const getPostsWithinDistanceOfPoint = async (
   latitude: string,
   longitude: string,
-  distanceKm: string
+  distanceKm: string,
 ): Promise<Post[]> => {
   // if running in dev mode use test posts
   if (process.env.NODE_ENV === "development") return mockPosts;
@@ -41,7 +41,7 @@ export const getPostsWithinDistanceOfPoint = async (
     results.map(async (result) => {
       const totalVotes = await getTotalPostVotes(result.id);
       return { ...result, votes: totalVotes };
-    })
+    }),
   );
   return resultsWithVotes || [];
 };
@@ -50,13 +50,14 @@ export const createPost = async (
   post: string,
   latitude: string,
   longitude: string,
-  userId: string
+  userId: string,
 ) => {
   const uuid = crypto.randomUUID();
+  const date = new Date().toUTCString();
   const db = (await getCloudflareContext()).env.DB;
   await db
     .prepare(createPostQuery)
-    .bind(uuid, post, latitude, longitude, userId)
+    .bind(uuid, post, latitude, longitude, userId, date)
     .run();
 };
 
@@ -75,7 +76,7 @@ export const getTotalPostVotes = async (postId: string): Promise<number> => {
 export const upsertUserPostVote = async (
   postId: string,
   userId: string,
-  vote: number
+  vote: number,
 ) => {
   const uuid = crypto.randomUUID();
   const db = (await getCloudflareContext()).env.DB;
