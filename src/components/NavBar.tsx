@@ -4,6 +4,7 @@ import Image from "next/image";
 import ToggleButtons from "./ToggleButtons";
 import PostModal from "./PostModal";
 import { useState } from "react";
+import LocationTitle from "./LocationTitle";
 
 export default function NavBar() {
   const [showComposeModal, setShowComposeModal] = useState(false);
@@ -21,7 +22,8 @@ export default function NavBar() {
             />
           </button>
         </div>
-        <ToggleButtons />
+        {/* <ToggleButtons /> */}
+        <LocationTitle />
         <div className="flex items-center">
           <button onClick={() => setShowComposeModal(true)}>
             <Image
