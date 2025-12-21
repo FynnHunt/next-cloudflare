@@ -13,26 +13,26 @@ export default function NavBar() {
     <div className="p-6 border-solid border-2 border-lime-400 w-full bg-lime-400">
       <div className="flex justify-between">
         <div className="flex items-center">
-          <button>
+          {/* <button>
             <Image
               src="/icons/goose2.svg"
               width={40}
               height={40}
               alt="compose icon"
             />
-          </button>
+          </button> */}
         </div>
         {/* <ToggleButtons /> */}
         <LocationTitle />
         <div className="flex items-center">
-          <button onClick={() => setShowComposeModal(true)}>
+          {/* <button onClick={() => setShowComposeModal(true)}>
             <Image
               src="/icons/compose2.svg"
               width={30}
               height={30}
               alt="compose icon"
             />
-          </button>
+          </button> */}
         </div>
       </div>
       <PostModal

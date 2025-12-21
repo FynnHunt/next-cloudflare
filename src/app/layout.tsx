@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={oswald.className}>
-        <main className="flex min-h-screen flex-col items-center">
+        <main className="flex min-h-content flex-col items-center">
           <NavBar />
           {children}
         </main>
