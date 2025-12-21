@@ -8,7 +8,7 @@ import {
   postsWithinDistanceOfPointQuery,
   upsertUserPostVoteQuery,
 } from "../../sql/postQueries";
-import { mockPosts, aiGeneratedPosts } from "../../lib/testData";
+import { mockPosts } from "../../lib/testData";
 
 export const getPosts = async (): Promise<Post[]> => {
   const db = (await getCloudflareContext()).env.DB;
@@ -53,7 +53,7 @@ export const createPost = async (
   userId: string,
 ) => {
   const uuid = crypto.randomUUID();
-  const date = new Date().toUTCString();
+  const date = Date.now();
   const db = (await getCloudflareContext()).env.DB;
   await db
     .prepare(createPostQuery)

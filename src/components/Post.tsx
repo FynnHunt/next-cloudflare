@@ -6,6 +6,7 @@ type PostProps = {
   votes: number;
   postId: string;
   userVoteStatus: VoteStatus;
+  date: string;
 };
 
 export default function Post({
@@ -13,13 +14,19 @@ export default function Post({
   votes,
   postId,
   userVoteStatus,
+  date,
 }: PostProps) {
   return (
     <div
-      className={`bg-zinc-800 w-full md:w-9/12 md:max-w-7xl h-32 rounded-md p-6 flex h-fit`}
+      className={`bg-zinc-800 w-full md:w-9/12 md:max-w-7xl h-32 rounded-md p-6 h-fit`}
     >
-      <div className="flex-auto">{text}</div>
-      <Vote votes={votes} postId={postId} voteStatus={userVoteStatus} />
+      <div className="flex">
+        <div className="flex-auto">{text}</div>
+        <Vote votes={votes} postId={postId} voteStatus={userVoteStatus} />
+      </div>
+      <span style={{ color: "grey" }}>
+        {date && new Date(Number(date)).toLocaleString()}
+      </span>
     </div>
   );
 }
