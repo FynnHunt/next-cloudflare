@@ -26,18 +26,18 @@ export default function PostList({ distanceKm }: PostListProps) {
     const getAndSetPosts = async () => {
       console.log(location);
       let currentPosts: PostType[] = [];
-      if (location?.latitude && location?.longitude) {
+      if (location?.location?.latitude && location?.location?.longitude) {
         currentPosts = await getPostsWithinDistanceOfPoint(
-          String(location.latitude),
-          String(location.longitude),
-          String(distanceKm),
+          String(location.location.latitude),
+          String(location.location.longitude),
+          String(distanceKm)
         );
         console.log("CURRENT POSTS: ", currentPosts);
       }
       if (window.location.search.includes("hot")) {
         // sort by votes
         currentPosts = currentPosts.sort(({ votes: a }, { votes: b }) => b - a);
-      } 
+      }
       setPosts(currentPosts.filter((c) => c.content !== ""));
     };
 
