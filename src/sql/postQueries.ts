@@ -13,7 +13,7 @@ WITH calculated_posts AS (
 )
 SELECT * FROM calculated_posts
 WHERE distance_km <= ?3
-ORDER BY distance_km;
+ORDER BY id DESC;
 `;
 
 export const createPostQuery =
