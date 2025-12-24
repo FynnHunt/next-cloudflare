@@ -48,7 +48,7 @@ export default function PostList({ distanceKm }: PostListProps) {
 
     getAndSetPosts();
     getAndSetUsersPostVotes();
-  }, [distanceKm, location]);
+  }, [distanceKm, location.location]);
 
   const getUserVoteStatusForPost = (postId: string): VoteStatus => {
     const upv =
