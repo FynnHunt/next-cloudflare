@@ -37,10 +37,7 @@ export default function PostList({ distanceKm }: PostListProps) {
       if (window.location.search.includes("hot")) {
         // sort by votes
         currentPosts = currentPosts.sort(({ votes: a }, { votes: b }) => b - a);
-      } else {
-        // otherwise sort by most recent
-        currentPosts.reverse();
-      }
+      } 
       setPosts(currentPosts.filter((c) => c.content !== ""));
     };
 

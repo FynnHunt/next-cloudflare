@@ -1,3 +1,4 @@
+import { getTimeAgo } from "@/lib/dateFormatter";
 import { VoteStatus } from "../types/posts";
 import Vote from "./Vote";
 
@@ -25,7 +26,7 @@ export default function Post({
         <Vote votes={votes} postId={postId} voteStatus={userVoteStatus} />
       </div>
       <span style={{ color: "grey" }}>
-        {date && new Date(Number(date)).toLocaleString()}
+        {date && getTimeAgo(Number(date))}
       </span>
     </div>
   );
