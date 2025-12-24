@@ -26,7 +26,7 @@ export default function Post({
         <Vote votes={votes} postId={postId} voteStatus={userVoteStatus} />
       </div>
       <span style={{ color: "grey" }}>
-        {date && getTimeAgo(Number(date))}
+        {date ? getTimeAgo(Number(date)) : "No date :("}
       </span>
     </div>
   );
