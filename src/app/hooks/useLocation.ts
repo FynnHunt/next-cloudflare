@@ -84,7 +84,7 @@ export const useLocation = (): Location => {
           } else if (geoLocation.address.village) {
             setLocationNameFn(geoLocation.address.village);
           } else if (geoLocation.address.town) {
-            setLocationName(geoLocation.address.town);
+            setLocationNameFn(geoLocation.address.town);
           } else if (geoLocation.address.city) {
             setLocationNameFn(geoLocation.address.city);
           } else if (geoLocation.address.county) {
