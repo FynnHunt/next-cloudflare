@@ -2,10 +2,10 @@
 
 // I made this file using cursor ai, it's a modal for creating a new post
 
-import { createPost } from "@/app/actions/postActions";
 import Image from "next/image";
 import { useState } from "react";
 import { useLocation } from "../app/hooks/useLocation";
+import { createPost } from "../lib/clientData";
 
 type ModalProps = {
   showModal: boolean;
@@ -16,16 +16,27 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
   const [postContent, setPostContent] = useState("");
   const location = useLocation();
 
-  const post = () => {
+  const post = async () => {
     if (typeof window !== "undefined") {
       if (location?.location?.latitude && location?.location?.longitude) {
-        createPost(
+        let userId = window.localStorage.getItem("userId");
+        if (!userId) {
+          userId = crypto.randomUUID();
+          window.localStorage.setItem("userId", userId);
+        }
+
+        await createPost(
           postContent,
           location.location.latitude.toString(),
           location.location.longitude.toString(),
-          window.localStorage.getItem("userId") || crypto.randomUUID()
+          userId,
         );
-        window.location.reload();
+
+        if (process.env.NODE_ENV !== "development") {
+          window.location.reload();
+        }
+
+        setPostContent("");
       } else {
         alert(
           "You must enable location services for this site to create posts."
@@ -120,9 +131,9 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
               <button
                 type="button"
                 className="text-zinc-900 inline-flex w-full justify-center rounded-md bg-amber-200 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-300 sm:ml-3 sm:w-auto"
-                onClick={() => {
+                onClick={async () => {
                   setShowModal(false);
-                  post();
+                  await post();
                 }}
               >
                 Send

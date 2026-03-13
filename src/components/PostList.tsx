@@ -1,11 +1,11 @@
 "use client";
-import { getPostsWithinDistanceOfPoint } from "@/app/actions/postActions";
 import Post from "./Post";
 import { useEffect, useState } from "react";
 import { Post as PostType, VoteStatus } from "../types/posts";
 import { Vote } from "../types/posts";
-import { getUsersPostVotes } from "../app/actions/userActions";
 import { useLocation } from "../app/hooks/useLocation";
+import { getPostsWithinDistanceOfPoint, getUsersPostVotes } from "../lib/clientData";
+import { DEV_DATA_UPDATED_EVENT } from "../lib/devLocalData";
 
 type PostListProps = {
   distanceKm: number;
@@ -17,37 +17,46 @@ export default function PostList({ distanceKm }: PostListProps) {
   const location = useLocation();
 
   useEffect(() => {
-    const userId = window.localStorage.getItem("userId");
+    const loadPosts = async () => {
+      const userId = window.localStorage.getItem("userId");
 
-    if (!userId) {
-      return;
-    }
-
-    const getAndSetPosts = async () => {
-      console.log(location);
-      let currentPosts: PostType[] = [];
-      if (location?.location?.latitude && location?.location?.longitude) {
-        currentPosts = await getPostsWithinDistanceOfPoint(
-          String(location.location.latitude),
-          String(location.location.longitude),
-          String(distanceKm)
-        );
-        console.log("CURRENT POSTS: ", currentPosts);
+      if (!userId) {
+        return;
       }
+
+      let currentPosts: PostType[] = [];
+
+      if (
+        process.env.NODE_ENV === "development" ||
+        (location?.location?.latitude && location?.location?.longitude)
+      ) {
+        currentPosts = await getPostsWithinDistanceOfPoint(
+          String(location?.location?.latitude || ""),
+          String(location?.location?.longitude || ""),
+          String(distanceKm),
+        );
+      }
+
+      setUsersPostVotes(await getUsersPostVotes(userId));
+
       if (window.location.search.includes("hot")) {
-        // sort by votes
         currentPosts = currentPosts.sort(({ votes: a }, { votes: b }) => b - a);
       }
-      setPosts(currentPosts.filter((c) => c.content !== ""));
+
+      setPosts(currentPosts.filter((post) => post.content !== ""));
     };
 
-    const getAndSetUsersPostVotes = async () => {
-      const uPV = await getUsersPostVotes(userId);
-      setUsersPostVotes(uPV);
+    loadPosts();
+
+    const handleDevDataUpdate = () => {
+      loadPosts();
     };
 
-    getAndSetPosts();
-    getAndSetUsersPostVotes();
+    window.addEventListener(DEV_DATA_UPDATED_EVENT, handleDevDataUpdate);
+
+    return () => {
+      window.removeEventListener(DEV_DATA_UPDATED_EVENT, handleDevDataUpdate);
+    };
   }, [distanceKm, location.location]);
 
   const getUserVoteStatusForPost = (postId: string): VoteStatus => {
@@ -55,7 +64,6 @@ export default function PostList({ distanceKm }: PostListProps) {
       usersPostVotes && Array.isArray(usersPostVotes)
         ? usersPostVotes.find((upv) => upv.post_id === postId)
         : null;
-    console.log(usersPostVotes);
     if (upv) {
       switch (upv?.vote) {
         case 0:

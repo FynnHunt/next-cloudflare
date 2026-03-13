@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { colors } from "../globalStyles";
-import { upsertUserPostVote } from "../app/actions/postActions";
 import { VoteStatus } from "../types/posts";
+import { upsertUserPostVote } from "../lib/clientData";
 
 export default function Vote({
   votes,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { createUser } from "../app/actions/userActions";
+import { createUser } from "../lib/clientData";
 
 export default function Auth() {
   useEffect(() => {
@@ -15,7 +15,6 @@ export default function Auth() {
         await createUser(uuid);
       };
       createNewUser();
-      window.location.reload();
     }
   }, []);
 
