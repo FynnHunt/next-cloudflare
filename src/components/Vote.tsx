@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { colors } from "../globalStyles";
 import { upsertUserPostVote } from "../app/actions/postActions";
 import { VoteStatus } from "../types/posts";
@@ -14,31 +15,56 @@ export default function Vote({
   postId: string;
   voteStatus: VoteStatus;
 }) {
-  const upVote = () => {
+  const [currentVotes, setCurrentVotes] = useState(votes || 0);
+  const [currentVoteStatus, setCurrentVoteStatus] = useState(voteStatus);
+
+  const updateVote = async (
+    userId: string,
+    nextVoteStatus: VoteStatus,
+    nextVoteValue: number,
+  ) => {
+    const previousVotes = currentVotes;
+    const previousVoteStatus = currentVoteStatus;
+
+    setCurrentVotes((value) => {
+      if (nextVoteStatus === "positive") return value + 1;
+      if (nextVoteStatus === "negative") return value - 1;
+      if (previousVoteStatus === "positive") return value - 1;
+      if (previousVoteStatus === "negative") return value + 1;
+      return value;
+    });
+    setCurrentVoteStatus(nextVoteStatus);
+
+    try {
+      await upsertUserPostVote(postId, userId, nextVoteValue);
+    } catch (error) {
+      console.error("Unable to save vote", error);
+      setCurrentVotes(previousVotes);
+      setCurrentVoteStatus(previousVoteStatus);
+    }
+  };
+
+  const upVote = async () => {
     if (typeof window !== "undefined") {
       const userId = window.localStorage.getItem("userId");
       if (userId) {
-        if (voteStatus === "negative") {
-          upsertUserPostVote(postId, userId, 0);
-          window.location.reload();
-        } else if (voteStatus === "neutral") {
-          upsertUserPostVote(postId, userId, 1);
-          window.location.reload();
+        if (currentVoteStatus === "negative") {
+          await updateVote(userId, "neutral", 0);
+        } else if (currentVoteStatus === "neutral") {
+          await updateVote(userId, "positive", 1);
         }
       }
     }
   };
 
-  const downVote = () => {
+  const downVote = async () => {
     if (typeof window !== "undefined") {
       const userId = window.localStorage.getItem("userId");
       if (userId) {
-        if (voteStatus === "positive") {
-          upsertUserPostVote(postId, userId, 0);
-          window.location.reload();
-        } else if (voteStatus === "neutral") {
-          upsertUserPostVote(postId, userId, -1);
-          window.location.reload();
+        if (currentVoteStatus === "positive") {
+          await updateVote(userId, "neutral", 0);
+        } else if (currentVoteStatus === "neutral") {
+          await updateVote(userId, "negative", -1);
         }
       }
     }
@@ -52,7 +78,7 @@ export default function Vote({
       <button onClick={() => upVote()}>
         <Image
           src={`/icons/up-${
-            voteStatus === "positive" ? "positive" : "neutral"
+            currentVoteStatus === "positive" ? "positive" : "neutral"
           }.svg`}
           alt="up arrow"
           width={40}
@@ -60,11 +86,11 @@ export default function Vote({
           style={{}}
         />
       </button>
-      {votes || 0}
+      {currentVotes}
       <button onClick={() => downVote()}>
         <Image
           src={`/icons/down-${
-            voteStatus === "negative" ? "negative" : "neutral"
+            currentVoteStatus === "negative" ? "negative" : "neutral"
           }.svg`}
           alt="up arrow"
           width={40}
