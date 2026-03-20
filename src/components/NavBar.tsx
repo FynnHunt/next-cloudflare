@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import ToggleButtons from "./ToggleButtons";
 import PostModal from "./PostModal";
 import { useState } from "react";
 import LocationTitle from "./LocationTitle";
@@ -10,29 +8,16 @@ export default function NavBar() {
   const [showComposeModal, setShowComposeModal] = useState(false);
 
   return (
-    <div className="p-6 border-solid border-2 border-lime-400 w-full bg-lime-400">
-      <div className="flex justify-between">
-        <div className="flex items-center">
-          {/* <button>
-            <Image
-              src="/icons/goose2.svg"
-              width={40}
-              height={40}
-              alt="compose icon"
-            />
-          </button> */}
+    <div className="sticky top-0 z-20 w-full border-b border-lime-300/40 bg-lime-300/90 text-zinc-950 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-5 md:px-8">
+        <div className="flex min-w-0 flex-col gap-2">
+          <span className="text-[11px] uppercase tracking-[0.35em] text-zinc-700">
+            Local feed
+          </span>
+          <LocationTitle />
         </div>
-        {/* <ToggleButtons /> */}
-        <LocationTitle />
-        <div className="flex items-center">
-          {/* <button onClick={() => setShowComposeModal(true)}>
-            <Image
-              src="/icons/compose2.svg"
-              width={30}
-              height={30}
-              alt="compose icon"
-            />
-          </button> */}
+        <div className="hidden rounded-full border border-zinc-900/10 bg-lime-200/70 px-4 py-2 text-sm text-zinc-800 md:block">
+          Anonymous posts near you
         </div>
       </div>
       <PostModal

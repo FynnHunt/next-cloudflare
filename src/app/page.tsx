@@ -6,7 +6,7 @@ import NewPostButton from "@/components/NewPostButton";
 
 export default function Home() {
   return (
-    <div className="bg-zinc-900 w-full flex flex-col items-center p-6 gap-y-3">
+    <div className="w-full flex flex-col items-center px-4 pb-10 pt-6 md:px-8 md:pb-16 md:pt-8">
       {/* <ToggleButtons /> */}
       <NewPostButton />
       <PostList distanceKm={3} />

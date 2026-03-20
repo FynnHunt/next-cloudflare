@@ -72,10 +72,13 @@ export default function Vote({
 
   return (
     <div
-      className="flex flex-none justify-center items-center flex-col"
+      className="flex min-w-[72px] flex-none items-center justify-center rounded-2xl border border-zinc-700/80 bg-zinc-900/70 px-2 py-3"
       style={{ color: colors.neutral }}
     >
-      <button onClick={() => upVote()}>
+      <button
+        className="rounded-full p-1 transition-colors hover:bg-zinc-800"
+        onClick={() => upVote()}
+      >
         <Image
           src={`/icons/up-${
             currentVoteStatus === "positive" ? "positive" : "neutral"
@@ -86,8 +89,13 @@ export default function Vote({
           style={{}}
         />
       </button>
-      {currentVotes}
-      <button onClick={() => downVote()}>
+      <span className="my-1 text-lg font-semibold text-zinc-100">
+        {currentVotes}
+      </span>
+      <button
+        className="rounded-full p-1 transition-colors hover:bg-zinc-800"
+        onClick={() => downVote()}
+      >
         <Image
           src={`/icons/down-${
             currentVoteStatus === "negative" ? "negative" : "neutral"

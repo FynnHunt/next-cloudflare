@@ -3,22 +3,45 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 250, 250, 249;
+  --background-rgb: 24, 24, 27;
+  --surface-rgb: 39, 39, 42;
+  --surface-soft-rgb: 63, 63, 70;
+  --lime-rgb: 163, 230, 53;
+  --amber-rgb: 254, 243, 199;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-rgb: 24, 24, 27;
+    --surface-rgb: 39, 39, 42;
+    --surface-soft-rgb: 63, 63, 70;
+    --lime-rgb: 163, 230, 53;
+    --amber-rgb: 254, 243, 199;
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
+  min-height: 100vh;
   color: rgb(var(--foreground-rgb));
-  background: rgb(24, 24, 27);
+  background:
+    radial-gradient(circle at top, rgba(var(--lime-rgb), 0.16), transparent 28%),
+    linear-gradient(180deg, rgba(var(--surface-soft-rgb), 0.22), transparent 22%),
+    rgb(var(--background-rgb));
+}
+
+::selection {
+  background: rgba(var(--lime-rgb), 0.35);
+  color: rgb(var(--foreground-rgb));
 }
 
 @layer utilities {

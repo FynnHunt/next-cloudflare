@@ -80,7 +80,7 @@ export default function PostList({ distanceKm }: PostListProps) {
   };
 
   return (
-    <>
+    <div className="flex w-full flex-col gap-4 md:max-w-7xl md:gap-5">
       {posts.map((post, idx) => (
         <Post
           key={post.id}
@@ -91,6 +91,6 @@ export default function PostList({ distanceKm }: PostListProps) {
           date={post.date}
         />
       ))}
-    </>
+    </div>
   );
 }

@@ -63,7 +63,7 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
       To: "opacity-0"
   --> */}
       <div
-        className="fixed inset-0 bg-gray-500/75 transition-opacity"
+        className="fixed inset-0 bg-zinc-950/70 backdrop-blur-sm transition-opacity"
         aria-hidden="true"
       ></div>
 
@@ -79,10 +79,10 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
           From: "opacity-100 translate-y-0 sm:scale-100"
           To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
       --> */}
-          <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full sm:my-8 sm:max-w-xl">
-            <div className="bg-lime-200 px-4 pb-4 pt-5 sm:p-6 sm:pb-4 h-[200px]">
+          <div className="relative w-full transform overflow-hidden rounded-3xl border border-lime-300/40 bg-zinc-900 text-left shadow-[0_24px_70px_rgba(0,0,0,0.45)] transition-all sm:my-8 sm:max-w-xl">
+            <div className="bg-gradient-to-br from-lime-200 via-lime-300 to-lime-400 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
               <div className="sm:flex sm:items-start">
-                <div className="hidden sm:flex sm:mx-0 sm:size-10 shrink-0 items-center justify-center">
+                <div className="hidden shrink-0 items-center justify-center sm:flex sm:mx-0 sm:size-10">
                   {/* <svg
                     className="size-6 text-red-600"
                     fill="none"
@@ -105,16 +105,19 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
                     alt="compose icon"
                   />
                 </div>
-                <div className="text-left w-full sm:ml-4 sm:mt-0">
+                <div className="w-full text-left sm:ml-4 sm:mt-0">
                   <h3
-                    className="text-base font-semibold text-gray-900"
+                    className="text-xl font-semibold text-zinc-950"
                     id="modal-title"
                   >
                     New post
                   </h3>
-                  <div className="mt-2 w-full">
+                  <p className="mt-1 text-sm text-zinc-800/80">
+                    Share something people nearby should know.
+                  </p>
+                  <div className="mt-3 w-full">
                     <textarea
-                      className="w-full bg-amber-50 text-zinc-900 p-3 h-[120px]"
+                      className="h-[140px] w-full rounded-2xl border border-zinc-900/10 bg-amber-50 p-4 text-zinc-900 shadow-inner outline-none transition focus:border-zinc-900/30"
                       id="post"
                       name="post"
                       value={postContent}
@@ -127,10 +130,10 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
                 </div>
               </div>
             </div>
-            <div className="bg-lime-400 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+            <div className="bg-zinc-900 px-4 py-4 sm:flex sm:flex-row-reverse sm:px-6">
               <button
                 type="button"
-                className="text-zinc-900 inline-flex w-full justify-center rounded-md bg-amber-200 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-300 sm:ml-3 sm:w-auto"
+                className="inline-flex w-full justify-center rounded-full bg-lime-300 px-5 py-2.5 text-sm font-semibold text-zinc-950 shadow-sm transition hover:bg-lime-200 sm:ml-3 sm:w-auto"
                 onClick={async () => {
                   setShowModal(false);
                   await post();
@@ -140,7 +143,7 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
               </button>
               <button
                 type="button"
-                className="text-zinc-900 mt-3 inline-flex w-full justify-center rounded-md bg-amber-50 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                className="mt-3 inline-flex w-full justify-center rounded-full border border-zinc-700 bg-zinc-800 px-5 py-2.5 text-sm font-semibold text-zinc-100 shadow-sm transition hover:bg-zinc-700 sm:mt-0 sm:w-auto"
                 onClick={() => setShowModal(false)}
               >
                 Cancel

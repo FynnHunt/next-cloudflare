@@ -7,17 +7,17 @@ export default function LocationTitle() {
   const location = useLocation();
 
   return (
-    <div style={{ fontSize: "30px" }}>
+    <div className="truncate pb-1 text-2xl font-semibold leading-[1.15] tracking-wide md:text-4xl">
       {location.locationName ? (
         <>
-          Spotted:
+          Spotted near
           <span style={{ color: colors.primaryYellow }}>
             {" "}
             {location.locationName}
           </span>
         </>
       ) : (
-        "Spotted"
+        "Spotted near you"
       )}
     </div>
   );
