@@ -34,8 +34,8 @@ body {
   min-height: 100vh;
   color: rgb(var(--foreground-rgb));
   background:
-    radial-gradient(circle at top, rgba(var(--lime-rgb), 0.16), transparent 28%),
-    linear-gradient(180deg, rgba(var(--surface-soft-rgb), 0.22), transparent 22%),
+    radial-gradient(circle at top, rgba(var(--lime-rgb), 0.09), transparent 18%),
+    linear-gradient(180deg, rgba(var(--surface-soft-rgb), 0.18), transparent 18%),
     rgb(var(--background-rgb));
 }
 
