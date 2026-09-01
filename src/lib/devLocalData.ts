@@ -6,6 +6,7 @@ import { Post, Vote } from "../types/posts";
 const DEV_POSTS_KEY = "dev.posts";
 const DEV_VOTES_KEY = "dev.votes";
 const DEV_USERS_KEY = "dev.users";
+const DEV_DATE_VERSION_KEY = "dev.postDatesVersion";
 
 export const DEV_DATA_UPDATED_EVENT = "dev-data-updated";
 
@@ -30,6 +31,16 @@ const writeJson = <T>(key: string, value: T) => {
 const ensureDevData = () => {
   if (!window.localStorage.getItem(DEV_POSTS_KEY)) {
     writeJson(DEV_POSTS_KEY, mockPosts);
+  }
+
+  // Refresh cached sample dates once, preserving real posts and existing votes.
+  if (window.localStorage.getItem(DEV_DATE_VERSION_KEY) !== "1") {
+    const posts = readJson<Post[]>(DEV_POSTS_KEY, []);
+    writeJson(DEV_POSTS_KEY, posts.map((post) => {
+      const sample = mockPosts.find((mock) => mock.id === post.id && mock.user_id === post.user_id);
+      return sample ? { ...post, date: sample.date } : post;
+    }));
+    window.localStorage.setItem(DEV_DATE_VERSION_KEY, "1");
   }
 
   if (!window.localStorage.getItem(DEV_VOTES_KEY)) {

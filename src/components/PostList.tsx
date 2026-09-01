@@ -10,6 +10,7 @@ import {
   getUsersPostVotes,
 } from "../lib/clientData";
 import { DEV_DATA_UPDATED_EVENT } from "../lib/devLocalData";
+import { comparePostDatesNewestFirst } from "../lib/postDates";
 type PostListProps = {
   distanceKm: number;
 };
@@ -20,6 +21,7 @@ export default function PostList({ distanceKm }: PostListProps) {
   const [sort, setSort] = useState("new");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
   useEffect(() => {
     const loadPosts = async () => {
       try {
@@ -40,11 +42,6 @@ export default function PostList({ distanceKm }: PostListProps) {
           );
         }
         setUsersPostVotes(await getUsersPostVotes(userId));
-        if (window.location.search.includes("hot")) {
-          currentPosts = currentPosts.sort(
-            ({ votes: a }, { votes: b }) => b - a,
-          );
-        }
         setPosts(currentPosts.filter((post) => post.content !== ""));
         setError(false);
       } catch {
@@ -53,16 +50,21 @@ export default function PostList({ distanceKm }: PostListProps) {
         setLoading(false);
       }
     };
+
     setSort(window.location.search.includes("hot") ? "hot" : "new");
     loadPosts();
+
     const handleDevDataUpdate = () => {
       loadPosts();
     };
+
     window.addEventListener(DEV_DATA_UPDATED_EVENT, handleDevDataUpdate);
+
     return () => {
       window.removeEventListener(DEV_DATA_UPDATED_EVENT, handleDevDataUpdate);
     };
   }, [distanceKm, location.location]);
+
   const getUserVoteStatusForPost = (postId: string): VoteStatus => {
     const upv =
       usersPostVotes && Array.isArray(usersPostVotes)
@@ -128,7 +130,7 @@ export default function PostList({ distanceKm }: PostListProps) {
             .sort((a, b) =>
               sort === "hot"
                 ? b.votes - a.votes
-                : Number(b.date) - Number(a.date),
+                : comparePostDatesNewestFirst(a, b),
             )
             .map((post) => (
               <Post

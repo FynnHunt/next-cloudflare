@@ -1,3 +1,7 @@
+const now = Date.now();
+const HOUR = 60 * 60 * 1000;
+const DAY = 24 * HOUR;
+
 export const mockPosts = [
   {
     id: "test1",
@@ -8,7 +12,7 @@ export const mockPosts = [
     hidden: "false",
     votes: 10,
     user_id: "test",
-    date: Date.now().toString(),
+    date: (now).toString(),
   },
   {
     id: "test2",
@@ -18,7 +22,7 @@ export const mockPosts = [
     hidden: "false",
     votes: 10,
     user_id: "test",
-    date: Date.now().toString(),
+    date: (now - 3 * HOUR).toString(),
   },
   {
     id: "test3",
@@ -28,7 +32,7 @@ export const mockPosts = [
     hidden: "false",
     votes: 10,
     user_id: "test",
-    date: Date.now().toString(),
+    date: (now - 12 * DAY).toString(),
   },
   {
     id: "test4",
@@ -38,6 +42,6 @@ export const mockPosts = [
     hidden: "false",
     votes: 10,
     user_id: "test",
-    date: Date.now().toString(),
+    date: (now - 90 * DAY).toString(),
   },
 ];

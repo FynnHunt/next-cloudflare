@@ -1,4 +1,5 @@
 import { getTimeAgo } from "@/lib/dateFormatter";
+import { parsePostDate } from "@/lib/postDates";
 import { VoteStatus } from "../types/posts";
 import Vote from "./Vote";
 import Icon from "./Icon";
@@ -16,6 +17,7 @@ export default function Post({
   userVoteStatus,
   date,
 }: PostProps) {
+  const timestamp = parsePostDate(date);
   const tint =
     Array.from(postId).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 4;
   return (
@@ -27,7 +29,7 @@ export default function Post({
         <div>
           <span className="post-author">A neighbor</span>
           <span className="post-time">
-            {date ? getTimeAgo(Number(date)) : "Nearby"}
+            {timestamp !== null ? getTimeAgo(timestamp) : "Date unavailable"}
           </span>
         </div>
         <span className="post-local">
