@@ -48,11 +48,11 @@ export const useLocation = (): Location => {
         });
         window.sessionStorage.setItem(
           "latitude",
-          position.coords.latitude.toString()
+          position.coords.latitude.toString(),
         );
         window.sessionStorage.setItem(
           "longitude",
-          position.coords.longitude.toString()
+          position.coords.longitude.toString(),
         );
       });
     } else {
@@ -70,7 +70,7 @@ export const useLocation = (): Location => {
       try {
         if (location?.latitude && location?.longitude) {
           const geoLocationResponse = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${location?.latitude}&lon=${location?.longitude}&format=json`
+            `https://nominatim.openstreetmap.org/reverse?lat=${location?.latitude}&lon=${location?.longitude}&format=json`,
           );
 
           if (!geoLocationResponse.ok) {

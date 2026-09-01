@@ -1,159 +1,144 @@
 "use client";
-
-// I made this file using cursor ai, it's a modal for creating a new post
-
-import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "../app/hooks/useLocation";
 import { createPost } from "../lib/clientData";
-
+import Icon from "./Icon";
 type ModalProps = {
   showModal: boolean;
   setShowModal: (cond: boolean) => void;
 };
-
 export default function PostModal({ showModal, setShowModal }: ModalProps) {
-  const [postContent, setPostContent] = useState("");
-  const location = useLocation();
+  const [content, setContent] = useState("");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
 
-  const post = async () => {
-    if (typeof window !== "undefined") {
-      if (location?.location?.latitude && location?.location?.longitude) {
-        let userId = window.localStorage.getItem("userId");
-        if (!userId) {
-          userId = crypto.randomUUID();
-          window.localStorage.setItem("userId", userId);
-        }
+  const dialog = useRef<HTMLDialogElement>(null);
+  const { location } = useLocation();
 
-        await createPost(
-          postContent,
-          location.location.latitude.toString(),
-          location.location.longitude.toString(),
-          userId,
-        );
+  useEffect(() => {
+    if (showModal) {
+      dialog.current?.showModal();
+      setError("");
+    } else dialog.current?.close();
+  }, [showModal]);
 
-        if (process.env.NODE_ENV !== "development") {
-          window.location.reload();
-        }
+  useEffect(() => {
+    if (!showModal) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [showModal]);
 
-        setPostContent("");
-      } else {
-        alert(
-          "You must enable location services for this site to create posts."
-        );
-      }
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    if (!content.trim() || pending) return;
+
+    if (!location) {
+      setError(
+        "Enable location access in your browser to share with neighbors.",
+      );
+      return;
     }
-  };
 
-  return showModal ? (
-    <div
-      className="relative z-10"
+    setPending(true);
+    setError("");
+
+    try {
+      let userId = window.localStorage.getItem("userId");
+
+      if (!userId) {
+        userId = crypto.randomUUID();
+        window.localStorage.setItem("userId", userId);
+      }
+
+      await createPost(
+        content.trim(),
+        String(location.latitude),
+        String(location.longitude),
+        userId,
+      );
+
+      setContent("");
+      setShowModal(false);
+
+      if (process.env.NODE_ENV !== "development") window.location.reload();
+    } catch {
+      setError("Your post couldn’t be shared. Please try again.");
+    } finally {
+      setPending(false);
+    }
+  }
+  return (
+    <dialog
+      ref={dialog}
+      className="post-dialog"
       aria-labelledby="modal-title"
-      role="dialog"
-      aria-modal="true"
+      onCancel={(event) => {
+        event.preventDefault();
+        if (!pending) setShowModal(false);
+      }}
+      onClick={(event) => {
+        if (event.target === dialog.current && !pending) setShowModal(false);
+      }}
     >
-      {/* <!--
-    Background backdrop, show/hide based on modal state.
-
-    Entering: "ease-out duration-300"
-      From: "opacity-0"
-      To: "opacity-100"
-    Leaving: "ease-in duration-200"
-      From: "opacity-100"
-      To: "opacity-0"
-  --> */}
-      <div
-        className="fixed inset-0 bg-zinc-950/70 backdrop-blur-sm transition-opacity"
-        aria-hidden="true"
-      ></div>
-
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex min-h-full items-end justify-center p-0 text-center sm:items-center sm:p-0">
-          {/* <!--
-        Modal panel, show/hide based on modal state.
-
-        Entering: "ease-out duration-300"
-          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          To: "opacity-100 translate-y-0 sm:scale-100"
-        Leaving: "ease-in duration-200"
-          From: "opacity-100 translate-y-0 sm:scale-100"
-          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-      --> */}
-          <div className="relative w-full transform overflow-hidden rounded-3xl border border-lime-300/40 bg-zinc-900 text-left shadow-[0_24px_70px_rgba(0,0,0,0.45)] transition-all sm:my-8 sm:max-w-xl">
-            <div className="bg-gradient-to-br from-lime-200 via-lime-300 to-lime-400 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
-                <div className="hidden shrink-0 items-center justify-center sm:flex sm:mx-0 sm:size-10">
-                  {/* <svg
-                    className="size-6 text-red-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                    data-slot="icon"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
-                    />
-                  </svg> */}
-                  <Image
-                    src="/icons/compose2.svg"
-                    width={30}
-                    height={30}
-                    alt="compose icon"
-                  />
-                </div>
-                <div className="w-full text-left sm:ml-4 sm:mt-0">
-                  <h3
-                    className="text-xl font-semibold text-zinc-950"
-                    id="modal-title"
-                  >
-                    New post
-                  </h3>
-                  <p className="mt-1 text-sm text-zinc-800/80">
-                    Share something people nearby should know.
-                  </p>
-                  <div className="mt-3 w-full">
-                    <textarea
-                      className="h-[140px] w-full rounded-2xl border border-zinc-900/10 bg-amber-50 p-4 text-zinc-900 shadow-inner outline-none transition focus:border-zinc-900/30"
-                      id="post"
-                      name="post"
-                      value={postContent}
-                      style={{ resize: "none" }}
-                      onChange={(e) => setPostContent(e.target.value)}
-                    >
-                      New post...
-                    </textarea>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-zinc-900 px-4 py-4 sm:flex sm:flex-row-reverse sm:px-6">
-              <button
-                type="button"
-                className="inline-flex w-full justify-center rounded-full bg-lime-300 px-5 py-2.5 text-sm font-semibold text-zinc-950 shadow-sm transition hover:bg-lime-200 sm:ml-3 sm:w-auto"
-                onClick={async () => {
-                  setShowModal(false);
-                  await post();
-                }}
-              >
-                Send
-              </button>
-              <button
-                type="button"
-                className="mt-3 inline-flex w-full justify-center rounded-full border border-zinc-700 bg-zinc-800 px-5 py-2.5 text-sm font-semibold text-zinc-100 shadow-sm transition hover:bg-zinc-700 sm:mt-0 sm:w-auto"
-                onClick={() => setShowModal(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
+      <form onSubmit={submit}>
+        <div className="dialog-heading">
+          <h2 id="modal-title">New post</h2>
+          <button
+            type="button"
+            className="icon-button"
+            aria-label="Close dialog"
+            disabled={pending}
+            onClick={() => setShowModal(false)}
+          >
+            <Icon name="close" />
+          </button>
         </div>
-      </div>
-    </div>
-  ) : (
-    <></>
+        <label htmlFor="post-content">
+          What’s happening in your neighborhood?
+        </label>
+        <textarea
+          id="post-content"
+          autoFocus
+          value={content}
+          maxLength={1000}
+          placeholder="Write your post…"
+          onChange={(event) => setContent(event.target.value)}
+          disabled={pending}
+        />
+        <div className="dialog-detail">
+          <span>
+            <Icon name="shield" size={13} />
+            Posted anonymously · Within 3 km
+          </span>
+          <span>{content.length}/1,000</span>
+        </div>
+        {error && (
+          <p className="form-error" role="alert">
+            {error}
+          </p>
+        )}
+        <div className="dialog-actions">
+          <button
+            type="button"
+            className="secondary-button"
+            disabled={pending}
+            onClick={() => setShowModal(false)}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="primary-button"
+            disabled={pending || !content.trim()}
+          >
+            {pending ? "Sharing…" : "Post"}
+            <Icon name="arrow" size={15} />
+          </button>
+        </div>
+      </form>
+    </dialog>
   );
 }

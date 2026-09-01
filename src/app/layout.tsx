@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { Oswald } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
-
-const oswald = Oswald({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Spotted Near You",
@@ -17,11 +14,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={oswald.className}>
-        <main className="flex min-h-screen flex-col items-center">
+      <body>
+        <div>
           <NavBar />
           {children}
-        </main>
+        </div>
       </body>
     </html>
   );

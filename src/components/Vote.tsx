@@ -1,11 +1,8 @@
 "use client";
-
-import Image from "next/image";
+import Icon from "./Icon";
 import { useState } from "react";
-import { colors } from "../globalStyles";
 import { VoteStatus } from "../types/posts";
 import { upsertUserPostVote } from "../lib/clientData";
-
 export default function Vote({
   votes,
   postId,
@@ -33,6 +30,7 @@ export default function Vote({
       if (previousVoteStatus === "negative") return value + 1;
       return value;
     });
+
     setCurrentVoteStatus(nextVoteStatus);
 
     try {
@@ -47,6 +45,7 @@ export default function Vote({
   const upVote = async () => {
     if (typeof window !== "undefined") {
       const userId = window.localStorage.getItem("userId");
+
       if (userId) {
         if (currentVoteStatus === "negative") {
           await updateVote(userId, "neutral", 0);
@@ -60,6 +59,7 @@ export default function Vote({
   const downVote = async () => {
     if (typeof window !== "undefined") {
       const userId = window.localStorage.getItem("userId");
+
       if (userId) {
         if (currentVoteStatus === "positive") {
           await updateVote(userId, "neutral", 0);
@@ -71,39 +71,27 @@ export default function Vote({
   };
 
   return (
-    <div
-      className="flex min-w-[72px] flex-none items-center justify-center rounded-2xl border border-zinc-700/80 bg-zinc-900/70 px-2 py-3"
-      style={{ color: colors.neutral }}
-    >
+    <div className="vote-control">
       <button
-        className="rounded-full p-1 transition-colors hover:bg-zinc-800"
+        aria-label="Upvote post"
+        aria-pressed={currentVoteStatus === "positive"}
+        className={
+          currentVoteStatus === "positive" ? "voted voted-up" : "vote-up"
+        }
         onClick={() => upVote()}
       >
-        <Image
-          src={`/icons/up-${
-            currentVoteStatus === "positive" ? "positive" : "neutral"
-          }.svg`}
-          alt="up arrow"
-          width={40}
-          height={40}
-          style={{}}
-        />
+        <Icon name="up" size={17} />
       </button>
-      <span className="my-1 text-lg font-semibold text-zinc-100">
-        {currentVotes}
-      </span>
+      <span>{currentVotes}</span>
       <button
-        className="rounded-full p-1 transition-colors hover:bg-zinc-800"
+        aria-label="Downvote post"
+        aria-pressed={currentVoteStatus === "negative"}
+        className={
+          currentVoteStatus === "negative" ? "voted voted-down" : "vote-down"
+        }
         onClick={() => downVote()}
       >
-        <Image
-          src={`/icons/down-${
-            currentVoteStatus === "negative" ? "negative" : "neutral"
-          }.svg`}
-          alt="up arrow"
-          width={40}
-          height={40}
-        />
+        <Icon name="down" size={17} />
       </button>
     </div>
   );

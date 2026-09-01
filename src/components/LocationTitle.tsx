@@ -1,24 +1,14 @@
 "use client";
-
 import { useLocation } from "@/app/hooks/useLocation";
-import { colors } from "@/globalStyles";
-
+import Icon from "./Icon";
 export default function LocationTitle() {
-  const location = useLocation();
-
+  const { locationName } = useLocation();
   return (
-    <div className="truncate pb-1 text-2xl font-semibold leading-[1.15] tracking-wide md:text-4xl">
-      {location.locationName ? (
-        <>
-          Spotted near
-          <span style={{ color: colors.primaryYellow }}>
-            {" "}
-            {location.locationName}
-          </span>
-        </>
-      ) : (
-        "Spotted near you"
-      )}
-    </div>
+    <span className="location-pill">
+      <span className="status-dot" />
+      <Icon name="pin" size={14} />
+      {locationName || "Your neighborhood"}
+      <span className="location-radius">3 km radius</span>
+    </span>
   );
 }

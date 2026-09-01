@@ -1,7 +1,7 @@
 import { getTimeAgo } from "@/lib/dateFormatter";
 import { VoteStatus } from "../types/posts";
 import Vote from "./Vote";
-
+import Icon from "./Icon";
 type PostProps = {
   text: string;
   votes: number;
@@ -9,7 +9,6 @@ type PostProps = {
   userVoteStatus: VoteStatus;
   date: string;
 };
-
 export default function Post({
   text,
   votes,
@@ -17,21 +16,33 @@ export default function Post({
   userVoteStatus,
   date,
 }: PostProps) {
+  const tint =
+    Array.from(postId).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 4;
   return (
-    <div
-      className="w-full rounded-3xl border border-zinc-700/80 bg-zinc-800/90 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.2)] backdrop-blur transition-colors duration-200 hover:border-lime-300/40 md:max-w-7xl md:p-6"
-    >
-      <div className="flex items-start gap-4 md:gap-6">
-        <div className="flex-auto">
-          <p className="whitespace-pre-wrap text-base leading-7 text-zinc-100 md:text-lg">
-            {text}
-          </p>
+    <article className="post-card">
+      <div className="post-meta">
+        <span className={"avatar tint-" + tint}>
+          <Icon name={["chat", "spark", "home", "pin"][tint]} size={19} />
+        </span>
+        <div>
+          <span className="post-author">A neighbor</span>
+          <span className="post-time">
+            {date ? getTimeAgo(Number(date)) : "Nearby"}
+          </span>
         </div>
-        <Vote votes={votes} postId={postId} voteStatus={userVoteStatus} />
+        <span className="post-local">
+          <Icon name="pin" size={12} />
+          Nearby
+        </span>
       </div>
-      <span className="mt-4 inline-block text-sm uppercase tracking-[0.22em] text-zinc-500">
-        {date ? getTimeAgo(Number(date)) : "No date :("}
-      </span>
-    </div>
+      <p className="post-content">{text}</p>
+      <div className="post-footer">
+        <Vote votes={votes} postId={postId} voteStatus={userVoteStatus} />
+        <span className="anonymous-label">
+          <Icon name="shield" size={13} />
+          Anonymous
+        </span>
+      </div>
+    </article>
   );
 }
