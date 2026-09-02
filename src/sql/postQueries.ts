@@ -23,3 +23,15 @@ export const upsertUserPostVoteQuery =
   "INSERT INTO votes (id, post_id, user_id, vote) VALUES (?1, ?2, ?3, ?4) ON CONFLICT(post_id, user_id) DO UPDATE SET vote = excluded.vote;";
 
 export const getTotalPostVotesQuery = `SELECT SUM(vote) AS total_votes FROM votes WHERE post_id = ?1;`;
+
+export const getPostCommentsQuery = `
+SELECT id, user_id, post_id, content
+FROM comments
+WHERE post_id = ?1
+ORDER BY rowid ASC;
+`;
+
+export const createCommentQuery = `
+INSERT INTO comments (id, user_id, post_id, content)
+VALUES (?1, ?2, ?3, ?4);
+`;

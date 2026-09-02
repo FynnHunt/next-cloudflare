@@ -1,10 +1,12 @@
 "use server";
 
-import { Post } from "@/types/posts";
+import { Comment, Post } from "@/types/posts";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import {
   createPostQuery,
+  createCommentQuery,
   getTotalPostVotesQuery,
+  getPostCommentsQuery,
   postsWithinDistanceOfPointQuery,
   upsertUserPostVoteQuery,
 } from "../../sql/postQueries";
@@ -18,7 +20,8 @@ export const getPosts = async (): Promise<Post[]> => {
   const resultsWithVotes = await Promise.all(
     results.map(async (result) => {
       const totalVotes = await getTotalPostVotes(result.id);
-      return { ...result, votes: totalVotes };
+      const comments = await getPostComments(result.id);
+      return { ...result, votes: totalVotes, comments };
     }),
   );
   return resultsWithVotes || [];
@@ -40,7 +43,8 @@ export const getPostsWithinDistanceOfPoint = async (
   const resultsWithVotes = await Promise.all(
     results.map(async (result) => {
       const totalVotes = await getTotalPostVotes(result.id);
-      return { ...result, votes: totalVotes };
+      const comments = await getPostComments(result.id);
+      return { ...result, votes: totalVotes, comments };
     }),
   );
   return resultsWithVotes || [];
@@ -71,6 +75,36 @@ export const getTotalPostVotes = async (postId: string): Promise<number> => {
     return totalVotes.results[0].total_votes;
   }
   return 0;
+};
+
+export const getPostComments = async (postId: string): Promise<Comment[]> => {
+  const db = (await getCloudflareContext()).env.DB;
+  const { results }: { results: Comment[] } = await db
+    .prepare(getPostCommentsQuery)
+    .bind(postId)
+    .all();
+  return results || [];
+};
+
+export const createComment = async (
+  postId: string,
+  userId: string,
+  content: string,
+): Promise<Comment> => {
+  const trimmedContent = content.trim();
+  if (!trimmedContent) throw new Error("Comment content is required");
+  const comment: Comment = {
+    id: crypto.randomUUID(),
+    user_id: userId,
+    post_id: postId,
+    content: trimmedContent,
+  };
+  const db = (await getCloudflareContext()).env.DB;
+  await db
+    .prepare(createCommentQuery)
+    .bind(comment.id, comment.user_id, comment.post_id, comment.content)
+    .run();
+  return comment;
 };
 
 export const upsertUserPostVote = async (

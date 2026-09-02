@@ -12,7 +12,8 @@ export const mockPosts = [
     hidden: "false",
     votes: 10,
     user_id: "test",
-    date: (now).toString(),
+    date: now.toString(),
+    comments: [],
   },
   {
     id: "test2",
@@ -23,6 +24,7 @@ export const mockPosts = [
     votes: 10,
     user_id: "test",
     date: (now - 3 * HOUR).toString(),
+    comments: [],
   },
   {
     id: "test3",
@@ -33,6 +35,7 @@ export const mockPosts = [
     votes: 10,
     user_id: "test",
     date: (now - 12 * DAY).toString(),
+    comments: [],
   },
   {
     id: "test4",
@@ -43,5 +46,27 @@ export const mockPosts = [
     votes: 10,
     user_id: "test",
     date: (now - 90 * DAY).toString(),
+    comments: [],
+  },
+];
+
+export const mockComments = [
+  {
+    id: "comment1",
+    user_id: "test-commenter-1",
+    post_id: "test1",
+    content: "I noticed this too — thanks for posting about it.",
+  },
+  {
+    id: "comment2",
+    user_id: "test-commenter-2",
+    post_id: "test1",
+    content: "This is really useful local information.",
+  },
+  {
+    id: "comment3",
+    user_id: "test-commenter-3",
+    post_id: "test2",
+    content: "Good to know!",
   },
 ];

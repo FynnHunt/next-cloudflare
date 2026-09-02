@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  createComment as createCommentAction,
   createPost as createPostAction,
   getPostsWithinDistanceOfPoint as getPostsWithinDistanceOfPointAction,
   upsertUserPostVote as upsertUserPostVoteAction,
@@ -11,12 +12,14 @@ import {
 } from "@/app/actions/userActions";
 import { Post, Vote } from "../types/posts";
 import {
+  createDevComment,
   createDevPost,
   createDevUser,
   getDevPosts,
   getDevUsersPostVotes,
   upsertDevUserPostVote,
 } from "./devLocalData";
+import { Comment } from "../types/posts";
 
 export const createUser = async (userId: string) => {
   if (process.env.NODE_ENV === "development") {
@@ -47,6 +50,17 @@ export const createPost = async (
   }
 
   await createPostAction(post, latitude, longitude, userId);
+};
+
+export const createComment = async (
+  postId: string,
+  userId: string,
+  content: string,
+): Promise<Comment> => {
+  if (process.env.NODE_ENV === "development") {
+    return createDevComment(postId, userId, content);
+  }
+  return createCommentAction(postId, userId, content);
 };
 
 export const getPostsWithinDistanceOfPoint = async (

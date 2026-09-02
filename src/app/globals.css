@@ -358,6 +358,128 @@ svg {
   align-items: center;
 }
 
+.comment-toggle {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 8px;
+  border-radius:6px;
+  color:#777f6e;
+  font-size:13px;
+  font-weight:600;
+}
+
+.comment-actions {
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.add-comment-button {
+  padding:6px 8px;
+  border-radius:6px;
+  color:#777f6e;
+  font-size:13px;
+  font-weight:600;
+}
+
+.add-comment-button:hover {
+  color:#59634e;
+  background:#f1f3ec;
+}
+
+.comment-form {
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+}
+
+.comment-form label {
+  display:block;
+  margin-bottom:8px;
+  color:#596052;
+  font-size:13px;
+  font-weight:600;
+}
+
+.comment-form textarea {
+  display:block;
+  width:100%;
+  min-height:90px;
+  resize:vertical;
+  border:1px solid #dce1d4;
+  border-radius:8px;
+  padding:12px;
+  background:#fafbf7;
+  color:var(--ink);
+  font:inherit;
+  line-height:1.6;
+}
+
+.comment-form-footer {
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:10px;
+}
+
+.comment-form-footer>span {
+  margin-right:auto;
+  color:#969d8f;
+  font-size:12px;
+}
+
+.comment-form-footer .primary-button,
+.comment-form-footer .secondary-button {
+  padding:8px 12px;
+}
+
+.comment-error {
+  margin-top:8px;
+  color:#b64429;
+  font-size:13px;
+}
+
+.comment-toggle:hover {
+  color:#59634e;
+  background:#f1f3ec;
+}
+
+.comments-list {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+}
+
+.comment {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  color:#53594e;
+}
+
+.comment-avatar {
+  display:grid;
+  place-items:center;
+  flex:0 0 28px;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  color:#87917a;
+  background:#f0f2e9;
+}
+
+.comment p {
+  margin:2px 0 0;
+  font-size:15px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+
 .tint-1 {
   background: #f5e9dc;
   color: #ba8d65;

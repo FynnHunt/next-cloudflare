@@ -140,6 +140,7 @@ export default function PostList({ distanceKm }: PostListProps) {
                 postId={post.id}
                 userVoteStatus={getUserVoteStatusForPost(post.id)}
                 date={post.date}
+                comments={post.comments || []}
               />
             ))
         )}

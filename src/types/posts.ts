@@ -8,6 +8,14 @@ export type Post = {
   user_id: string;
   distance_km?: string;
   date: string;
+  comments: Comment[];
+};
+
+export type Comment = {
+  id: string;
+  user_id: string;
+  post_id: string;
+  content: string;
 };
 
 export type PostsResult = {

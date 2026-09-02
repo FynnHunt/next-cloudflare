@@ -1,12 +1,13 @@
 "use client";
 
-import { mockPosts } from "./testData";
-import { Post, Vote } from "../types/posts";
+import { mockComments, mockPosts } from "./testData";
+import { Comment, Post, Vote } from "../types/posts";
 
 const DEV_POSTS_KEY = "dev.posts";
 const DEV_VOTES_KEY = "dev.votes";
 const DEV_USERS_KEY = "dev.users";
 const DEV_DATE_VERSION_KEY = "dev.postDatesVersion";
+const DEV_COMMENTS_KEY = "dev.comments";
 
 export const DEV_DATA_UPDATED_EVENT = "dev-data-updated";
 
@@ -50,11 +51,19 @@ const ensureDevData = () => {
   if (!window.localStorage.getItem(DEV_USERS_KEY)) {
     writeJson(DEV_USERS_KEY, []);
   }
+
+  if (!window.localStorage.getItem(DEV_COMMENTS_KEY)) {
+    writeJson(DEV_COMMENTS_KEY, mockComments);
+  }
 };
 
 export const getDevPosts = (): Post[] => {
   ensureDevData();
-  return readJson<Post[]>(DEV_POSTS_KEY, []);
+  const comments = readJson<Comment[]>(DEV_COMMENTS_KEY, []);
+  return readJson<Post[]>(DEV_POSTS_KEY, []).map((post) => ({
+    ...post,
+    comments: comments.filter((comment) => comment.post_id === post.id),
+  }));
 };
 
 export const createDevPost = (
@@ -74,11 +83,32 @@ export const createDevPost = (
     votes: 0,
     user_id: userId,
     date: Date.now().toString(),
+    comments: [],
   };
 
   const posts = getDevPosts();
   writeJson(DEV_POSTS_KEY, [nextPost, ...posts]);
   window.dispatchEvent(new Event(DEV_DATA_UPDATED_EVENT));
+};
+
+export const createDevComment = (
+  postId: string,
+  userId: string,
+  content: string,
+): Comment => {
+  ensureDevData();
+  const trimmedContent = content.trim();
+  if (!trimmedContent) throw new Error("Comment content is required");
+  const comment: Comment = {
+    id: crypto.randomUUID(),
+    user_id: userId,
+    post_id: postId,
+    content: trimmedContent,
+  };
+  const comments = readJson<Comment[]>(DEV_COMMENTS_KEY, []);
+  writeJson(DEV_COMMENTS_KEY, [...comments, comment]);
+  window.dispatchEvent(new Event(DEV_DATA_UPDATED_EVENT));
+  return comment;
 };
 
 export const createDevUser = (userId: string) => {
