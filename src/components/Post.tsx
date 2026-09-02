@@ -7,6 +7,8 @@ import Vote from "./Vote";
 import Icon from "./Icon";
 import { FormEvent, useEffect, useState } from "react";
 import { createComment } from "@/lib/clientData";
+import { useLocation } from "@/app/hooks/useLocation";
+
 type PostProps = {
   text: string;
   votes: number;
@@ -15,6 +17,7 @@ type PostProps = {
   date: string;
   comments: Comment[];
 };
+
 export default function Post({
   text,
   votes,
@@ -29,6 +32,7 @@ export default function Post({
   const [localComments, setLocalComments] = useState(comments);
   const [submittingComment, setSubmittingComment] = useState(false);
   const [commentError, setCommentError] = useState("");
+  //   const { locationName } = useLocation();
   useEffect(() => setLocalComments(comments), [comments]);
 
   const submitComment = async (event: FormEvent<HTMLFormElement>) => {
@@ -38,7 +42,9 @@ export default function Post({
 
     const userId = window.localStorage.getItem("userId");
     if (!userId) {
-      setCommentError("Your anonymous account is not ready. Refresh and try again.");
+      setCommentError(
+        "Your anonymous account is not ready. Refresh and try again.",
+      );
       return;
     }
 
@@ -70,15 +76,15 @@ export default function Post({
           <Icon name={["chat", "spark", "home", "pin"][tint]} size={19} />
         </span>
         <div>
-          <span className="post-author">A neighbor</span>
+          <span className="post-author">A neighbour</span>
           <span className="post-time">
             {timestamp !== null ? getTimeAgo(timestamp) : "Date unavailable"}
           </span>
         </div>
-        <span className="post-local">
+        {/* <span className="post-local">
           <Icon name="pin" size={12} />
-          Nearby
-        </span>
+          {locationName}
+        </span> */}
       </div>
       <p className="post-content">{text}</p>
       <div className="post-footer">
@@ -93,7 +99,8 @@ export default function Post({
               onClick={() => setShowComments((visible) => !visible)}
             >
               <Icon name="chat" size={14} />
-              {localComments.length} {localComments.length === 1 ? "comment" : "comments"}
+              {localComments.length}{" "}
+              {localComments.length === 1 ? "comment" : "comments"}
             </button>
           )}
           <button
@@ -126,7 +133,11 @@ export default function Post({
             placeholder="Write a comment…"
             onChange={(event) => setCommentContent(event.target.value)}
           />
-          {commentError && <p className="comment-error" role="alert">{commentError}</p>}
+          {commentError && (
+            <p className="comment-error" role="alert">
+              {commentError}
+            </p>
+          )}
           <div className="comment-form-footer">
             <span>{commentContent.length}/1,000</span>
             <button

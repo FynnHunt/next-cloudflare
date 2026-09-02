@@ -37,7 +37,7 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
 
     if (!location) {
       setError(
-        "Enable location access in your browser to share with neighbors.",
+        "Enable location access in your browser to share with neighbours.",
       );
       return;
     }
@@ -97,7 +97,7 @@ export default function PostModal({ showModal, setShowModal }: ModalProps) {
           </button>
         </div>
         <label htmlFor="post-content">
-          What’s happening in your neighborhood?
+          What’s happening in your neighbourhood?
         </label>
         <textarea
           id="post-content"

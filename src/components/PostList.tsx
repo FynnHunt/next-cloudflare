@@ -85,7 +85,7 @@ export default function PostList({ distanceKm }: PostListProps) {
     return "neutral";
   };
   return (
-    <section aria-label="Neighborhood feed">
+    <section aria-label="Neighbourhood feed">
       <div className="feed-toolbar">
         <div className="feed-tabs">
           <button
@@ -117,7 +117,7 @@ export default function PostList({ distanceKm }: PostListProps) {
           </div>
         ) : error ? (
           <div className="empty-state" role="alert">
-            We couldn’t load your neighborhood. Please refresh to try again.
+            We couldn’t load your neighbourhood. Please refresh to try again.
           </div>
         ) : posts.length === 0 ? (
           <div className="empty-state">

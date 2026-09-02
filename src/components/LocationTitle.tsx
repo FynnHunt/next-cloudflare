@@ -7,7 +7,7 @@ export default function LocationTitle() {
     <span className="location-pill">
       <span className="status-dot" />
       <Icon name="pin" size={14} />
-      {locationName || "Your neighborhood"}
+      {locationName || "Your neighbourhood"}
       <span className="location-radius">3 km radius</span>
     </span>
   );
